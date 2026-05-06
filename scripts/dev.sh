@@ -37,21 +37,40 @@ for arg in "$@"; do
 done
 
 # ── Pre-flight: ensure .env files exist ─────────────────────────────────────
+# Source of truth: $REPO_ROOT/.env. The backend loads it explicitly; the
+# frontend keeps its own .env.local for the public API URL.
 ensure_env() {
   if [[ ! -f "$REPO_ROOT/.env" ]]; then
-    echo "→ creating .env from .env.example (fill in values before using real data)"
-    cp "$REPO_ROOT/.env.example" "$REPO_ROOT/.env"
+    if [[ -f "$REPO_ROOT/../web/.env.local" ]]; then
+      echo "→ seeding .env from ../web/.env.local (existing project credentials)"
+      cp "$REPO_ROOT/../web/.env.local" "$REPO_ROOT/.env"
+    else
+      echo "→ creating .env from .env.example — fill in real values before hitting the DB"
+      cp "$REPO_ROOT/.env.example" "$REPO_ROOT/.env"
+    fi
   fi
-  if [[ ! -f "$REPO_ROOT/backend/.env" ]]; then
-    echo "→ creating backend/.env from root .env"
-    cp "$REPO_ROOT/.env" "$REPO_ROOT/backend/.env"
+
+  # Older smoke-test stub from earlier iterations; root .env now covers everything.
+  if [[ -f "$REPO_ROOT/backend/.env" ]]; then
+    echo "→ removing stale backend/.env (root .env is now the source of truth)"
+    rm "$REPO_ROOT/backend/.env"
   fi
+
   if [[ ! -f "$REPO_ROOT/frontend/.env.local" ]]; then
     echo "→ creating frontend/.env.local with API base URLs"
     cat > "$REPO_ROOT/frontend/.env.local" <<EOF
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000/api/v1
 API_INTERNAL_BASE_URL=http://localhost:4000/api/v1
 EOF
+  fi
+
+  # Sanity check: warn if Supabase isn't configured — backend will fall back to mock data.
+  if ! grep -qE '^(SUPABASE_URL|NEXT_PUBLIC_SUPABASE_URL)=https?://' "$REPO_ROOT/.env" 2>/dev/null; then
+    echo ""
+    echo "  ⚠  No Supabase URL found in $REPO_ROOT/.env"
+    echo "     Backend will return mock data. Add SUPABASE_URL + SUPABASE_ANON_KEY"
+    echo "     (or NEXT_PUBLIC_-prefixed variants) and re-run."
+    echo ""
   fi
 }
 
