@@ -10,6 +10,7 @@
 #   ./scripts/dev.sh --backend   # only the backend
 #   ./scripts/dev.sh --frontend  # only the frontend
 #   ./scripts/dev.sh --install   # install deps in backend/ and frontend/ first
+#   ./scripts/dev.sh --clean     # clear frontend/.next cache before starting
 
 set -euo pipefail
 
@@ -18,6 +19,7 @@ cd "$REPO_ROOT"
 
 mode="all"
 do_install=0
+do_clean=0
 
 for arg in "$@"; do
   case "$arg" in
@@ -25,8 +27,9 @@ for arg in "$@"; do
     --backend)  mode="backend" ;;
     --frontend) mode="frontend" ;;
     --install)  do_install=1 ;;
+    --clean)    do_clean=1 ;;
     -h|--help)
-      sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *)
@@ -35,6 +38,11 @@ for arg in "$@"; do
       ;;
   esac
 done
+
+if [[ "$do_clean" -eq 1 ]]; then
+  echo "→ clearing frontend/.next cache"
+  rm -rf "$REPO_ROOT/frontend/.next"
+fi
 
 # ── Pre-flight: ensure .env files exist ─────────────────────────────────────
 # Source of truth: $REPO_ROOT/.env. The backend loads it explicitly; the
