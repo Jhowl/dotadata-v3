@@ -242,12 +242,24 @@ export async function getTeamsByIds(teamIds: string[]): Promise<Team[]> {
 
 export async function getTeamBySlug(slug: string): Promise<Team | null> {
     if (!supabase) {
-        return mockTeams.find((team) => team.slug === slug) ?? null;
+        return mockTeams.find((team) => team.slug === slug || team.id === slug) ?? null;
     }
 
     const trimmedSlug = slug.trim();
+    const lookupAsId = isNumericId(trimmedSlug);
 
     return withRedisCache(`team:${encodeCachePart(trimmedSlug)}`, DAY_IN_SECONDS, async () => {
+        if (lookupAsId) {
+            const { data, error } = await supabaseClient
+                .from('teams')
+                .select('team_id,slug,name,logo_url')
+                .eq('team_id', trimmedSlug)
+                .maybeSingle();
+            if (!error && data) {
+                return mapTeam(data as Record<string, unknown>);
+            }
+        }
+
         const { data, error } = await supabaseClient
             .from('teams')
             .select('team_id,slug,name,logo_url')
@@ -255,7 +267,7 @@ export async function getTeamBySlug(slug: string): Promise<Team | null> {
             .maybeSingle();
 
         if (error || !data) {
-            return mockTeams.find((team) => team.slug === slug) ?? null;
+            return mockTeams.find((team) => team.slug === slug || team.id === slug) ?? null;
         }
 
         return mapTeam(data as Record<string, unknown>);
@@ -313,16 +325,33 @@ export async function getPatchesWithCounts(): Promise<PatchWithCount[]> {
 }
 
 export async function getPatchBySlug(patchSlug: string): Promise<Patch | null> {
-    if (!supabase || !patchSlug) {
-        return null;
+    if (!patchSlug) return null;
+
+    if (!supabase) {
+        return mockPatches.find((p) => p.patch === patchSlug || p.id === patchSlug) ?? null;
     }
 
     const trimmedPatchSlug = patchSlug.trim();
+    const lookupAsId = isNumericId(trimmedPatchSlug);
+
     return withRedisCache(`patch:${encodeCachePart(trimmedPatchSlug)}`, DAY_IN_SECONDS, async () => {
-        const { data, error } = await supabaseClient.from('patch').select('id,patch').eq('patch', trimmedPatchSlug).maybeSingle();
-        if (error || !data) {
-            return null;
+        if (lookupAsId) {
+            const { data, error } = await supabaseClient
+                .from('patch')
+                .select('id,patch')
+                .eq('id', trimmedPatchSlug)
+                .maybeSingle();
+            if (!error && data) {
+                return mapPatch(data as Record<string, unknown>);
+            }
         }
+
+        const { data, error } = await supabaseClient
+            .from('patch')
+            .select('id,patch')
+            .eq('patch', trimmedPatchSlug)
+            .maybeSingle();
+        if (error || !data) return null;
         return mapPatch(data as Record<string, unknown>);
     });
 }

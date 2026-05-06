@@ -7,13 +7,20 @@ import {
   getTeamSummaries,
   getTeamSummary,
   getTeams,
+  getTeamsByIds,
   getTopPerformersByTeam,
 } from "@/models/queries.js";
 import { slugParam } from "@/validators/common.js";
 import { HttpError } from "@/middleware/error.js";
 
 export const teamsController = {
-  list: async (_req: Request, res: Response) => {
+  list: async (req: Request, res: Response) => {
+    const idsRaw = typeof req.query.ids === "string" ? req.query.ids : "";
+    if (idsRaw) {
+      const ids = idsRaw.split(",").map((s) => s.trim()).filter(Boolean);
+      res.json(await getTeamsByIds(ids));
+      return;
+    }
     res.json(await getTeams());
   },
 
