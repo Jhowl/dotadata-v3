@@ -1,0 +1,490 @@
+{
+  "common": {
+    "siteName": "DotaData",
+    "siteTagline": "Команды, лиги и аналитика матчей",
+    "siteDescription": "DotaData — хаб аналитики профессиональной Dota 2: тренды лиг, форма команд и сдвиги патчей.",
+    "exploreStats": "Открыть статистику",
+    "exploreLeagues": "К лигам",
+    "browseTeams": "К командам",
+    "patchAnalysis": "Анализ патчей",
+    "viewAll": "Смотреть всё",
+    "viewMore": "Подробнее",
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "back": "Назад",
+    "ongoing": "Идёт сейчас",
+    "completed": "Завершено",
+    "noData": "Нет данных.",
+    "share": "Поделиться",
+    "shareTo": "Поделиться через",
+    "copyLink": "Скопировать ссылку",
+    "linkCopied": "Ссылка скопирована!",
+    "more": "Ещё…",
+    "loading": "Загрузка…",
+    "matches": "Матчей",
+    "teams": "Команд",
+    "leagues": "Лиг",
+    "heroes": "Героев",
+    "winrate": "Винрейт",
+    "duration": "Длительность",
+    "match": "Матч",
+    "team": "Команда",
+    "winner": "Победитель",
+    "radiant": "Radiant",
+    "dire": "Dire",
+    "matchId": "ID матча",
+    "leagueId": "ID лиги",
+    "totalMatches": "Всего матчей",
+    "totalTeams": "Всего команд",
+    "avgDuration": "Средняя длительность",
+    "avgKills": "Среднее число убийств",
+    "lastMatch": "Последний матч",
+    "startDate": "Дата начала",
+    "endDate": "Дата окончания",
+    "released": "Релиз",
+    "champion": "Чемпион",
+    "runnerUp": "Финалист",
+    "language": "Язык",
+    "english": "English",
+    "russian": "Русский",
+    "min": "Мин",
+    "max": "Макс",
+    "downloadCsv": "Скачать CSV",
+    "exportCsv": "Экспорт CSV",
+    "viewTeamPage": "Открыть страницу команды",
+    "viewLeaguePage": "Открыть страницу лиги",
+    "backToTeam": "К команде",
+    "backToPatch": "К патчу",
+    "backToLeague": "К лиге",
+    "kda": "KDA",
+    "player": "Игрок",
+    "hero": "Герой",
+    "patch": "Патч",
+    "season": "Сезон",
+    "year": "Год"
+  },
+  "nav": {
+    "blog": "Блог",
+    "leagues": "Лиги",
+    "teams": "Команды",
+    "seasons": "Сезоны",
+    "international": "The International",
+    "patches": "Патчи",
+    "contact": "Контакты"
+  },
+  "auth": {
+    "signInSteam": "Войти через Steam",
+    "signOut": "Выйти"
+  },
+  "comments": {
+    "heading": "Комментарии",
+    "empty": "Комментариев пока нет. Будьте первым.",
+    "placeholder": "Поделитесь мнением…",
+    "submit": "Отправить",
+    "submitting": "Отправка…",
+    "signInPrompt": "Войдите через Steam, чтобы оставить комментарий.",
+    "signInCta": "Войти через Steam",
+    "delete": "Удалить",
+    "deleteConfirm": "Удалить этот комментарий?",
+    "loadError": "Не удалось загрузить комментарии.",
+    "submitError": "Не удалось отправить комментарий.",
+    "tooLong": "Слишком длинный комментарий (макс. {max} символов)."
+  },
+  "footer": {
+    "description": "Платформа данных по соревновательной Dota 2: лиги, команды и аналитика патчей. Создано для аналитиков, фанатов и киберспортивных операторов.",
+    "rightsReserved": "DotaData. Все права защищены."
+  },
+  "home": {
+    "title": "Аналитика и тренды профессиональной Dota 2",
+    "metaDescription": "Следите за {matches} матчами Dota 2 в {leagues} лигах и {teams} командах. Живая статистика, тренды патчей и аналитика команд на DotaData.",
+    "heroBadge": "Соревновательная аналитика",
+    "heroHeading": "Статистика про-Dota 2 — без воды.",
+    "heroLead": "DotaData покрывает {matches} матчей в {leagues} лигах и {teams} командах. Актуальный патч — {patch}.",
+    "heroLeadFallback": "DotaData покрывает {matches} матчей в {leagues} лигах и {teams} командах.",
+    "lastUpdated": "Обновлено {date}.",
+    "shareText": "📊 {matches} профессиональных матчей Dota 2 в {leagues} лигах и {teams} командах — живая статистика на DotaData",
+    "currentSeason": "Сезон {year} — главное",
+    "yearMatches": "Матчей в {year}",
+    "radiantWinrate": "Винрейт Radiant",
+    "yearAvgDuration": "Средняя длительность",
+    "uniqueTeams": "Уникальных команд",
+    "ranking": {
+      "title": "Топ лиг",
+      "lead": "Лучшие лиги по активности — отсортированы по числу матчей.",
+      "league": "Лига",
+      "matches": "Матчей",
+      "teams": "Команд",
+      "lastMatch": "Последний матч"
+    },
+    "trending": {
+      "title": "Активные команды",
+      "lead": "Составы с наибольшим числом матчей за последние 30 дней."
+    },
+    "patches": {
+      "title": "Свежие патчи",
+      "lead": "Объём матчей по патчам — следите за сдвигами меты."
+    },
+    "blog": {
+      "title": "Из блога",
+      "lead": "Редакционные разборы и контекст патчей для сообщества.",
+      "viewAll": "Смотреть все статьи"
+    },
+    "international": {
+      "title": "The International",
+      "lead": "Главный мировой чемпионат Dota 2.",
+      "cta": "Открыть хаб TI"
+    }
+  },
+  "leagues": {
+    "title": "Лиги и турниры Dota 2 — статистика про-сцены",
+    "metaDescription": "Профессиональные лиги и турниры Dota 2: матчи, команды и подробный анализ.",
+    "heroBadge": "Каталог лиг",
+    "heroHeading": "Лиги",
+    "heroLead": "Профессиональные лиги и турниры Dota 2 с покрытием матчей и расписанием событий.",
+    "shareText": "🏆 {leagues} про-лиг Dota 2 в {matches} матчах — открыть полный каталог на DotaData",
+    "kpi": {
+      "totalLeagues": "Всего лиг",
+      "totalMatches": "Всего матчей",
+      "latestLeague": "Последняя лига"
+    },
+    "table": {
+      "name": "Название",
+      "champion": "Чемпион",
+      "startDate": "Дата начала",
+      "endDate": "Дата окончания",
+      "totalMatches": "Всего матчей",
+      "totalTeams": "Всего команд",
+      "radiantWinrate": "Винрейт Radiant",
+      "direWinrate": "Винрейт Dire",
+      "noLeagues": "Лиги не найдены.",
+      "totalsLine": "Всего лиг: {leagues} • Всего матчей: {matches}"
+    },
+    "search": "Поиск лиг..."
+  },
+  "league": {
+    "metaTitle": "{name} — статистика, турнирная таблица и матчи Dota 2",
+    "metaDescriptionWithStats": "{name}: {matches} матчей, {teams} команд, в среднем {avgKills} убийств за матч. Анализ пиков и банов, лучшие игроки, участие команд и выгрузка данных.",
+    "metaDescriptionFallback": "Статистика, результаты и анализ команд для {name}. Пики/баны, лучшие игроки и составы на DotaData.",
+    "notFound": "Лига не найдена.",
+    "header": {
+      "badge": "Обзор лиги",
+      "ongoing": "Идёт сейчас",
+      "completed": "Завершено",
+      "duration": "{days, plural, one {# день} few {# дня} many {# дней} other {# дня}}",
+      "introWithStats": "Соревновательная статистика Dota 2 для {name}: {matches} матчей и {teams} команд. Тренды пиков и банов, лучшие игроки, участие команд и яркие матчи — ниже.",
+      "introFallback": "Профиль и детали для {name}. Данные о матчах появятся, как только будут доступны.",
+      "championBadge": "Чемпион: {team}",
+      "downloadHint": "Скачать данные матчей этой лиги.",
+      "start": "Начало: {date}",
+      "end": "Конец: {date}",
+      "lastMatch": "Последний матч: {date}"
+    },
+    "noMatches": {
+      "title": "Нет данных о матчах",
+      "message": "Для этой лиги пока нет матчей в базе данных."
+    },
+    "metrics": {
+      "heading": "Ключевые метрики",
+      "totalMatches": "Всего матчей",
+      "totalMatchesHint": "Сыграно в этой лиге",
+      "teams": "Команды",
+      "teamsHint": "Участвующие организации",
+      "avgDuration": "Средняя длительность",
+      "avgDurationHint": "Длительность матча",
+      "avgKills": "Среднее число убийств",
+      "avgKillsHint": "За матч",
+      "scoreRange": "Разброс счёта",
+      "sideWinrate": "Винрейт по сторонам",
+      "avgFirstTower": "Среднее время до первой башни",
+      "avgFirstTowerHint": "Время до уничтожения первой башни"
+    },
+    "highlights": {
+      "heading": "Яркие матчи",
+      "lead": "Памятные игры из {name} — самые быстрые разгромы и марафоны.",
+      "fastest": "Самый быстрый матч",
+      "longest": "Самый длинный матч",
+      "fastestShare": "⚡ Самый быстрый матч в {name}: {duration} — разбор на DotaData",
+      "longestShare": "⏱️ Марафонский матч в {name}: {duration} — разбор на DotaData"
+    },
+    "champion": {
+      "heading": "Чемпион",
+      "defeatedRunnerUp": "Обыграл {team} в гранд-финале",
+      "playedOn": "Финал сыгран {date}",
+      "roster": "Состав в финальной игре",
+      "shareTitle": "{team} — чемпион {league}",
+      "shareText": "🏆 {team} выиграл {league}{runnerUp} {score} — полная статистика лиги на DotaData",
+      "shareTextNoRunnerUp": "🏆 {team} выиграл {league} — полная статистика лиги на DotaData"
+    },
+    "pickBan": {
+      "heading": "Анализ пиков и банов",
+      "lead": "Самые пиканные, баненные и контестные герои в {name}.",
+      "fullDraft": "Полный разбор драфта",
+      "mostPicked": "Чаще всего пикают",
+      "mostBanned": "Чаще всего банят",
+      "mostContested": "Самые контестные",
+      "noData": "Данных по пикам/банам пока нет."
+    },
+    "performers": {
+      "heading": "Лучшие игроки",
+      "lead": "Рекорды индивидуальной игры в {name}.",
+      "noData": "Данных по игрокам пока нет.",
+      "shareText": "{title} в {league}: {value} — {player} на {hero} за {team} (KDA {kills}/{deaths}/{assists}) на DotaData"
+    },
+    "participation": {
+      "heading": "Участие команд",
+      "lead": "Винрейт, число матчей и фирменный герой по каждой команде в {name}.",
+      "bestWinrate": "Лучший винрейт: {team}",
+      "team": "Команда",
+      "matches": "Матчей",
+      "winrate": "Винрейт",
+      "mostPickedHero": "Самый частый пик",
+      "noData": "Данных по командам пока нет.",
+      "picks": "{count} пиков"
+    },
+    "faq": {
+      "heading": "О {name}",
+      "lead": "Часто задаваемые вопросы по статистике {name}.",
+      "matchesQ": "Сколько матчей сыграно в {name}?",
+      "matchesA": "В {name} сыграно {matches} матчей с участием {teams} команд.",
+      "durationQ": "Какова средняя длительность матча в {name}?",
+      "durationA": "Средняя длительность матча в {name} — {duration}, среднее число убийств — {avgKills}.",
+      "sideQ": "У какой стороны лучше винрейт в {name}?",
+      "sideA": "Radiant выиграл {radiant} матчей против {dire} у Dire по {matches} играм.",
+      "heroQ": "Какой герой пикается чаще всего в {name}?",
+      "heroA": "{hero} — самый пиканный герой в {name} с {picks} пиками.",
+      "topTeamQ": "У какой команды лучший винрейт в {name}?",
+      "topTeamA": "{team} лидирует в {name} с винрейтом {winrate} в {matches} матчах."
+    },
+    "bottomShare": {
+      "heading": "Понравилась статистика?",
+      "lead": "Поделитесь {name} с командой, скрим-группой или сообществом."
+    },
+    "shareText": "📊 {name}: {matches} матчей, {teams} команд, среднее число убийств {avgKills} — полная статистика на DotaData",
+    "shareTextNoStats": "📊 {name} на DotaData — статистика и анализ лиги Dota 2"
+  },
+  "leaguePickBan": {
+    "metaTitle": "{name} — анализ пиков и банов",
+    "metaDescription": "Полный разбор пиков и банов в {name}: {drafts} проанализированных драфтов, {heroes} уникальных героев, контест-рейты, винрейты, приоритет драфта, разбивка по сторонам и командам.",
+    "header": {
+      "badge": "Анализ пиков и банов",
+      "heading": "{name} — разбор драфта",
+      "lead": "Полный разбор пиков и банов {name}: {drafts} драфтов, {heroes} уникальных героев, контест-рейты, винрейты, приоритет драфта, разбивка по сторонам и командам.",
+      "back": "К обзору {name}"
+    },
+    "kpi": {
+      "drafts": "Драфтов проанализировано",
+      "draftsHint": "Просканировано {matches} матчей",
+      "totalPicks": "Всего пиков",
+      "totalBans": "Всего банов",
+      "uniqueHeroes": "Уникальных героев"
+    },
+    "shareText": "🎯 Анализ пиков и банов {name} на DotaData — контест-рейты, винрейты и приоритет драфта по каждому герою"
+  },
+  "teams": {
+    "title": "Профессиональные команды Dota 2 — статистика и история матчей",
+    "metaDescription": "Каталог профессиональных команд Dota 2: история матчей, форма и подробная аналитика.",
+    "heroBadge": "Каталог команд",
+    "heroHeading": "Команды Dota 2",
+    "heroLead": "Профессиональные команды Dota 2: история матчей и форма.",
+    "shareText": "👥 {teams} про-команд Dota 2 с историей в {matches} матчей — открыть каталог на DotaData",
+    "kpi": {
+      "teamsTracked": "Отслеживается команд",
+      "matchesAnalyzed": "Матчей в анализе",
+      "latestTeam": "Последняя команда"
+    },
+    "table": {
+      "logo": "Лого",
+      "name": "Название",
+      "totalMatches": "Всего матчей",
+      "avgDuration": "Средняя длительность",
+      "radiantWinrate": "Винрейт Radiant",
+      "direWinrate": "Винрейт Dire",
+      "lastMatch": "Последний матч",
+      "noTeams": "Команды не найдены.",
+      "totalsLine": "Всего команд: {teams}"
+    },
+    "search": "Поиск команд..."
+  },
+  "team": {
+    "header": {
+      "badge": "Обзор команды",
+      "teamId": "ID команды: {id}"
+    },
+    "shareText": "👥 {team}: {matches} матчей, полная история и аналитика на DotaData",
+    "noMatches": "У этой команды пока нет матчей.",
+    "metrics": {
+      "totalMatches": "Всего матчей",
+      "avgDuration": "Средняя длительность",
+      "avgScore": "Средний счёт",
+      "avgFirstTower": "Среднее время до первой башни"
+    }
+  },
+  "teamHandicap": {
+    "header": {
+      "badge": "Анализ форы",
+      "heading": "{team} — анализ форы",
+      "lead": "Анализ {matches} матчей с форой по убийствам от -16.5 до +16.5."
+    },
+    "howItWorks": {
+      "heading": "Как это работает:",
+      "body": "Для каждого матча мы моделируем, как изменился бы результат при применении форы по убийствам от -16.5 до +16.5. Положительная фора помогает проигравшей стороне, отрицательная — уменьшает преимущество победителя."
+    },
+    "byLeague": "Анализ форы по лигам",
+    "byPatch": "Анализ форы по патчам",
+    "shareText": "📊 Анализ форы по убийствам для {team} в {matches} матчах на DotaData"
+  },
+  "patches": {
+    "title": "Патчи Dota 2 — анализ форы по патчу",
+    "metaDescription": "Каталог патчей Dota 2 с анализом форы для команд по каждой версии.",
+    "heroBadge": "Аналитика патчей",
+    "heroHeading": "Патчи Dota 2",
+    "heroLead": "Выберите патч, чтобы посмотреть аналитику форы и форму команд.",
+    "shareText": "🔧 {patches} патчей Dota 2 и {matches} матчей — анализ форы на DotaData",
+    "kpi": {
+      "totalPatches": "Всего патчей",
+      "totalMatches": "Всего матчей",
+      "latestPatch": "Последний патч"
+    },
+    "table": {
+      "patch": "Патч",
+      "matches": "Матчей",
+      "releaseDate": "Дата релиза",
+      "actions": "Действия",
+      "viewPatch": "Открыть патч",
+      "noMatches": "Нет матчей",
+      "title": "Доступные патчи",
+      "lead": "Откройте патч, чтобы посмотреть аналитику форы команд."
+    },
+    "guide": {
+      "title": "Как пользоваться анализом форы",
+      "step1Title": "Выберите патч",
+      "step1Body": "Выберите версию патча для анализа формы команд в этой мете.",
+      "step2Title": "Выберите команды",
+      "step2Body": "Одну команду — для индивидуального анализа, две — для сравнения.",
+      "step3Title": "Анализируйте",
+      "step3Body": "Подробная статистика форы по победам, поражениям и паттернам."
+    },
+    "noData": "Данных по патчам пока нет."
+  },
+  "patch": {
+    "header": {
+      "badge": "Обзор патча",
+      "heading": "Патч {patch}",
+      "lead": "Тренды матчей и активность лиг в мете {patch}.",
+      "handicapAnalysis": "Анализ форы",
+      "generalHandicapTable": "Общая таблица форы",
+      "noMatches": "Для этого патча пока нет матчей."
+    },
+    "shareText": "🔧 Патч {patch}: {matches} матчей — тренды меты и активность лиг на DotaData"
+  },
+  "patchHandicap": {
+    "header": {
+      "badge": "Фора по патчу",
+      "heading": "Анализ форы — патч {patch}",
+      "lead": "Анализ форы по убийствам от -16.5 до +16.5 для команд этого патча.",
+      "generalTable": "Общая таблица"
+    },
+    "form": {
+      "team1": "Команда 1 (обязательно)",
+      "team2": "Команда 2 (необязательно)",
+      "team1Placeholder": "слаг или ID команды",
+      "team2Placeholder": "слаг или ID команды",
+      "analyze": "Анализировать"
+    },
+    "shareText": "📊 Анализ форы для патча {patch} на DotaData — выберите команды и посмотрите статистику"
+  },
+  "patchHandicapGeneral": {
+    "header": {
+      "badge": "Общая таблица форы по патчу",
+      "heading": "Патч {patch} — общая таблица форы",
+      "lead": "Сравните успешность форы по всем командам этого патча. Прокручивайте по горизонтали, чтобы увидеть все уровни форы.",
+      "teamComparison": "Сравнение команд"
+    },
+    "form": {
+      "search": "Фильтр команд...",
+      "filter": "Применить"
+    },
+    "shareText": "📊 Общая таблица форы для патча {patch} — все команды и все уровни форы на DotaData"
+  },
+  "seasons": {
+    "title": "Сезоны Dota 2 по годам — лиги и форма команд",
+    "metaDescription": "Сезоны Dota 2 по годам: лиги, команды, тренды матчей и историческая статистика.",
+    "heroBadge": "Архив сезонов",
+    "heroHeading": "Сезоны Dota 2 по годам",
+    "heroLead": "Годовые срезы соревновательной сцены: лиги, активность команд и помесячные тренды.",
+    "shareText": "📅 Архив сезонов Dota 2 — годовое покрытие лиг, активность команд и тренды на DotaData",
+    "viewSeason": "Открыть сезон →",
+    "season": "Сезон"
+  },
+  "season": {
+    "metaTitle": "Сезон Dota 2 {year} — лиги, команды и тренды матчей",
+    "metaDescription": "Соревновательная статистика Dota 2 за {year}: лиги, команды и помесячные тренды матчей.",
+    "header": {
+      "badge": "Сезон {year}",
+      "heading": "Сезон Dota 2 {year}",
+      "lead": "Срез про-сцены Dota 2 за год: активные лиги, лучшие команды и помесячные сдвиги по длительности и счёту.",
+      "downloadHint": "Скачать данные матчей этого сезона."
+    },
+    "kpi": {
+      "totalMatches": "Всего матчей",
+      "avgDuration": "Средняя длительность",
+      "avgScore": "Средний счёт",
+      "avgFirstTower": "Среднее время до первой башни"
+    },
+    "topTeams": "Топ команд (от 100 матчей)",
+    "allLeagues": "Все лиги",
+    "shareText": "📅 Сезон Dota 2 {year}: {matches} матчей — лиги, команды и тренды на DotaData",
+    "invalidYear": "Некорректный год сезона."
+  },
+  "blog": {
+    "title": "Блог DotaData — аналитика и стратегия Dota 2",
+    "metaDescription": "Тексты DotaData о трендах патчей, динамике команд, итогах лиг и практической аналитике Dota 2.",
+    "heroBadge": "Блог",
+    "heroHeading": "Блог DotaData",
+    "heroLead": "SEO-оптимизированные разборы, стратегические заметки и обзоры матчей.",
+    "shareText": "📝 Блог DotaData — тренды патчей, динамика команд, итоги лиг и аналитика Dota 2",
+    "noPosts": "Постов пока нет. Создайте их через таблицу blog_posts в Supabase.",
+    "minRead": "{minutes} мин чтения",
+    "updated": "Обновлено {date}"
+  },
+  "blogPost": {
+    "headerBadge": "Статья",
+    "shareText": "📝 {title} — {summary}",
+    "notFound": "Пост не найден",
+    "notFoundDescription": "Этот пост блога DotaData не найден."
+  },
+  "contact": {
+    "title": "Связаться с DotaData",
+    "metaDescription": "Свяжитесь с командой DotaData. Партнёрство, лицензирование данных и пресс-запросы.",
+    "heroBadge": "Контакты",
+    "heroHeading": "Связаться с нами",
+    "heroLead": "Напишите нам — мы ответим в течение нескольких рабочих дней.",
+    "form": {
+      "name": "Ваше имя",
+      "email": "Ваш email",
+      "subject": "Тема",
+      "message": "Сообщение",
+      "send": "Отправить",
+      "sending": "Отправляется…",
+      "success": "Спасибо — сообщение отправлено.",
+      "error": "Что-то пошло не так. Попробуйте ещё раз."
+    }
+  },
+  "international": {
+    "title": "The International — чемпионат мира по Dota 2",
+    "metaDescription": "Все эпизоды The International на DotaData: число матчей, тренды героев, рекорды и исторический контекст главного турнира Dota 2.",
+    "heroBadge": "Главное событие",
+    "heroHeading": "The International",
+    "heroLead": "The International — главный мировой чемпионат Dota 2. На этой странице собраны все эпизоды: результаты матчей, тренды героев и рекорды.",
+    "about": {
+      "title": "Об этой странице:",
+      "body": "Все эпизоды The International, винрейты и длительности матчей по годам, герои и игроки, определившие главную сцену Dota 2."
+    },
+    "shareText": "🏆 The International на DotaData: {editions} эпизодов, {matches} матчей — вся история события",
+    "editionsHeading": "Все эпизоды The International",
+    "editionsLead": "Объём матчей, средняя длительность и винрейт Radiant по каждому TI."
+  },
+  "share": {
+    "shareLabel": "Поделиться: {title}"
+  }
+}

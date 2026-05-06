@@ -1,0 +1,490 @@
+{
+  "common": {
+    "siteName": "DotaData",
+    "siteTagline": "Teams, Leagues, and Match Intelligence",
+    "siteDescription": "DotaData is a competitive Dota 2 analytics hub highlighting league trends, team performance, and patch shifts.",
+    "exploreStats": "Explore stats",
+    "exploreLeagues": "Explore leagues",
+    "browseTeams": "Browse teams",
+    "patchAnalysis": "Patch analysis",
+    "viewAll": "View all",
+    "viewMore": "View more",
+    "search": "Search",
+    "filter": "Filter",
+    "back": "Back",
+    "ongoing": "Ongoing",
+    "completed": "Completed",
+    "noData": "No data available.",
+    "share": "Share",
+    "shareTo": "Share to",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied!",
+    "more": "More…",
+    "loading": "Loading…",
+    "matches": "Matches",
+    "teams": "Teams",
+    "leagues": "Leagues",
+    "heroes": "Heroes",
+    "winrate": "Winrate",
+    "duration": "Duration",
+    "match": "Match",
+    "team": "Team",
+    "winner": "Winner",
+    "radiant": "Radiant",
+    "dire": "Dire",
+    "matchId": "Match ID",
+    "leagueId": "League ID",
+    "totalMatches": "Total matches",
+    "totalTeams": "Total teams",
+    "avgDuration": "Avg duration",
+    "avgKills": "Avg kills",
+    "lastMatch": "Last match",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "released": "Released",
+    "champion": "Champion",
+    "runnerUp": "Runner-up",
+    "language": "Language",
+    "english": "English",
+    "russian": "Русский",
+    "min": "Min",
+    "max": "Max",
+    "downloadCsv": "Download CSV",
+    "exportCsv": "Export CSV",
+    "viewTeamPage": "View team page",
+    "viewLeaguePage": "View league page",
+    "backToTeam": "Back to Team",
+    "backToPatch": "Back to Patch",
+    "backToLeague": "Back to League",
+    "kda": "KDA",
+    "player": "Player",
+    "hero": "Hero",
+    "patch": "Patch",
+    "season": "Season",
+    "year": "Year"
+  },
+  "nav": {
+    "blog": "Blog",
+    "leagues": "Leagues",
+    "teams": "Teams",
+    "seasons": "Seasons",
+    "international": "The International",
+    "patches": "Patches",
+    "contact": "Contact"
+  },
+  "auth": {
+    "signInSteam": "Sign in with Steam",
+    "signOut": "Sign out"
+  },
+  "comments": {
+    "heading": "Comments",
+    "empty": "No comments yet. Be the first to share your thoughts.",
+    "placeholder": "Share your thoughts…",
+    "submit": "Post",
+    "submitting": "Posting…",
+    "signInPrompt": "Sign in with Steam to leave a comment.",
+    "signInCta": "Sign in with Steam",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this comment?",
+    "loadError": "Couldn't load comments.",
+    "submitError": "Couldn't post comment.",
+    "tooLong": "Comment too long ({max} characters max)."
+  },
+  "footer": {
+    "description": "Competitive Dota 2 data platform focused on leagues, teams, and patch insights. Built for analysts, fans, and esports operators.",
+    "rightsReserved": "DotaData. All rights reserved."
+  },
+  "home": {
+    "title": "Competitive Dota 2 Analytics, Trends, and Match Intelligence",
+    "metaDescription": "Track {matches} pro Dota 2 matches across {leagues} leagues and {teams} teams. Explore live stats, patch trends, and team intelligence on DotaData.",
+    "heroBadge": "Competitive intelligence",
+    "heroHeading": "Pro Dota 2 stats, decoded.",
+    "heroLead": "DotaData covers {matches} matches across {leagues} leagues and {teams} teams. Latest patch is {patch}.",
+    "heroLeadFallback": "DotaData covers {matches} matches across {leagues} leagues and {teams} teams.",
+    "lastUpdated": "Last updated {date}.",
+    "shareText": "📊 {matches} pro Dota 2 matches across {leagues} leagues and {teams} teams — explore live stats on DotaData",
+    "currentSeason": "{year} season at a glance",
+    "yearMatches": "{year} matches",
+    "radiantWinrate": "Radiant winrate",
+    "yearAvgDuration": "Avg duration",
+    "uniqueTeams": "Unique teams",
+    "ranking": {
+      "title": "League leaderboard",
+      "lead": "Top leagues by recent activity, ranked by total matches.",
+      "league": "League",
+      "matches": "Matches",
+      "teams": "Teams",
+      "lastMatch": "Last match"
+    },
+    "trending": {
+      "title": "Trending teams",
+      "lead": "Active rosters with the highest match volume in the last 30 days."
+    },
+    "patches": {
+      "title": "Recent patches",
+      "lead": "Match volume per patch — see how the meta is shifting."
+    },
+    "blog": {
+      "title": "From the blog",
+      "lead": "Editorial breakdowns and patch context written for the community.",
+      "viewAll": "View all posts"
+    },
+    "international": {
+      "title": "The International",
+      "lead": "The flagship Dota 2 world championship.",
+      "cta": "Open the TI hub"
+    }
+  },
+  "leagues": {
+    "title": "Dota 2 Leagues & Tournaments — Professional Esports Statistics",
+    "metaDescription": "Explore professional Dota 2 leagues and tournaments with match counts, teams, and detailed analysis.",
+    "heroBadge": "Leagues index",
+    "heroHeading": "Leagues",
+    "heroLead": "Explore professional Dota 2 leagues and tournaments with match coverage and event schedules.",
+    "shareText": "🏆 {leagues} pro Dota 2 leagues across {matches} matches — explore the full index on DotaData",
+    "kpi": {
+      "totalLeagues": "Total leagues",
+      "totalMatches": "Total matches",
+      "latestLeague": "Latest league"
+    },
+    "table": {
+      "name": "Name",
+      "champion": "Champion",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "totalMatches": "Total matches",
+      "totalTeams": "Total teams",
+      "radiantWinrate": "Radiant winrate",
+      "direWinrate": "Dire winrate",
+      "noLeagues": "No leagues found.",
+      "totalsLine": "Total leagues: {leagues} • Total matches: {matches}"
+    },
+    "search": "Search leagues..."
+  },
+  "league": {
+    "metaTitle": "{name} — Dota 2 Statistics, Standings & Match Data",
+    "metaDescriptionWithStats": "{name} Dota 2 statistics: {matches} matches across {teams} teams, {avgKills} avg kills per match. Pick & ban analysis, top performers, team participation, and downloadable data.",
+    "metaDescriptionFallback": "Statistics, match results, and team analysis for {name}. Pick & ban data, top performers, and team standings on DotaData.",
+    "notFound": "League not found.",
+    "header": {
+      "badge": "League overview",
+      "ongoing": "Ongoing",
+      "completed": "Completed",
+      "duration": "{days, plural, one {# day} other {# days}}",
+      "introWithStats": "Competitive Dota 2 statistics for {name} covering {matches} matches and {teams} teams. Explore pick & ban trends, top performers, team participation and per-match highlights below.",
+      "introFallback": "Profile and details for {name}. Match data will appear here once available.",
+      "championBadge": "Champion: {team}",
+      "downloadHint": "Download match data for this league.",
+      "start": "Start: {date}",
+      "end": "End: {date}",
+      "lastMatch": "Last match: {date}"
+    },
+    "noMatches": {
+      "title": "No Match Data Available",
+      "message": "This league doesn't have any matches in the database yet."
+    },
+    "metrics": {
+      "heading": "Key metrics",
+      "totalMatches": "Total matches",
+      "totalMatchesHint": "Played in this league",
+      "teams": "Teams",
+      "teamsHint": "Competing organisations",
+      "avgDuration": "Avg duration",
+      "avgDurationHint": "Match length",
+      "avgKills": "Avg kills",
+      "avgKillsHint": "Per match",
+      "scoreRange": "Score range",
+      "sideWinrate": "Side winrate",
+      "avgFirstTower": "Avg first tower",
+      "avgFirstTowerHint": "Time to first tower destruction"
+    },
+    "highlights": {
+      "heading": "Match highlights",
+      "lead": "Standout games from {name} — fastest stomps and marathon battles.",
+      "fastest": "Fastest match",
+      "longest": "Longest match",
+      "fastestShare": "⚡ Fastest match in {name}: {duration} — see the breakdown on DotaData",
+      "longestShare": "⏱️ Longest marathon in {name}: {duration} — see the breakdown on DotaData"
+    },
+    "champion": {
+      "heading": "Champion",
+      "defeatedRunnerUp": "Defeated {team} in the grand final",
+      "playedOn": "Final played {date}",
+      "roster": "Final-game roster",
+      "shareTitle": "{team} — {league} champion",
+      "shareText": "🏆 {team} won {league}{runnerUp} {score} — full league stats on DotaData",
+      "shareTextNoRunnerUp": "🏆 {team} won {league} — full league stats on DotaData"
+    },
+    "pickBan": {
+      "heading": "Pick & ban analysis",
+      "lead": "Most picked, banned, and contested heroes in {name}.",
+      "fullDraft": "Full draft breakdown",
+      "mostPicked": "Most picked",
+      "mostBanned": "Most banned",
+      "mostContested": "Most contested",
+      "noData": "No picks/bans data yet."
+    },
+    "performers": {
+      "heading": "Top performers",
+      "lead": "Record-setting individual performances across {name}.",
+      "noData": "No player match data available yet.",
+      "shareText": "{title} in {league}: {value} — {player} on {hero} for {team} (KDA {kills}/{deaths}/{assists}) via DotaData"
+    },
+    "participation": {
+      "heading": "Team participation",
+      "lead": "Win rate, match volume, and signature hero per team in {name}.",
+      "bestWinrate": "Best winrate: {team}",
+      "team": "Team",
+      "matches": "Matches",
+      "winrate": "Winrate",
+      "mostPickedHero": "Most picked hero",
+      "noData": "No team participation data available yet.",
+      "picks": "{count} picks"
+    },
+    "faq": {
+      "heading": "About {name}",
+      "lead": "Frequently asked questions about {name} statistics.",
+      "matchesQ": "How many matches were played in {name}?",
+      "matchesA": "{matches} matches were played in {name}, featuring {teams} teams across the tournament.",
+      "durationQ": "What is the average match duration in {name}?",
+      "durationA": "Matches in {name} average {duration}, with {avgKills} average kills per match.",
+      "sideQ": "Which side has a better winrate in {name}?",
+      "sideA": "Radiant won {radiant} of matches versus {dire} for Dire across {matches} games.",
+      "heroQ": "Who is the most-picked hero in {name}?",
+      "heroA": "{hero} is the most-picked hero in {name} with {picks} picks.",
+      "topTeamQ": "Which team has the best winrate in {name}?",
+      "topTeamA": "{team} leads {name} with a {winrate} winrate over {matches} matches."
+    },
+    "bottomShare": {
+      "heading": "Found these stats useful?",
+      "lead": "Share {name} insights with your team, scrim group, or community."
+    },
+    "shareText": "📊 {name}: {matches} matches, {teams} teams, {avgKills} avg kills — full stats on DotaData",
+    "shareTextNoStats": "📊 {name} on DotaData — Dota 2 league stats and analysis"
+  },
+  "leaguePickBan": {
+    "metaTitle": "{name} — Pick & Ban Analysis",
+    "metaDescription": "Comprehensive pick & ban analysis for {name}: {drafts} drafts analysed, {heroes} unique heroes, contest rates, winrates, draft priority, side splits, and per-team breakdowns.",
+    "header": {
+      "badge": "Pick & Ban Analysis",
+      "heading": "{name} — Draft Breakdown",
+      "lead": "Comprehensive pick & ban analysis for {name}: {drafts} drafts analysed, {heroes} unique heroes, hero contest rates, winrates, draft priority, side splits and per-team breakdowns.",
+      "back": "Back to {name} overview"
+    },
+    "kpi": {
+      "drafts": "Drafts analysed",
+      "draftsHint": "{matches} matches scanned",
+      "totalPicks": "Total picks",
+      "totalBans": "Total bans",
+      "uniqueHeroes": "Unique heroes"
+    },
+    "shareText": "🎯 {name} pick & ban analysis on DotaData — contest rates, winrates and draft priority for every hero"
+  },
+  "teams": {
+    "title": "Professional Dota 2 Teams — Statistics, Match History & Analysis",
+    "metaDescription": "Browse professional Dota 2 teams with match history and performance analysis. Find detailed team data and competitive insights.",
+    "heroBadge": "Teams index",
+    "heroHeading": "Dota 2 Teams",
+    "heroLead": "Explore professional Dota 2 teams, their match history, and performance stats.",
+    "shareText": "👥 {teams} pro Dota 2 teams with {matches} matches of history — browse the full index on DotaData",
+    "kpi": {
+      "teamsTracked": "Teams tracked",
+      "matchesAnalyzed": "Matches analyzed",
+      "latestTeam": "Latest team"
+    },
+    "table": {
+      "logo": "Logo",
+      "name": "Team name",
+      "totalMatches": "Total matches",
+      "avgDuration": "Avg duration",
+      "radiantWinrate": "Radiant winrate",
+      "direWinrate": "Dire winrate",
+      "lastMatch": "Last match",
+      "noTeams": "No teams found.",
+      "totalsLine": "Total teams: {teams}"
+    },
+    "search": "Search teams..."
+  },
+  "team": {
+    "header": {
+      "badge": "Team overview",
+      "teamId": "Team ID: {id}"
+    },
+    "shareText": "👥 {team}: {matches} matches, full history and analytics on DotaData",
+    "noMatches": "This team has no matches recorded yet.",
+    "metrics": {
+      "totalMatches": "Total matches",
+      "avgDuration": "Avg duration",
+      "avgScore": "Avg score",
+      "avgFirstTower": "Avg first tower"
+    }
+  },
+  "teamHandicap": {
+    "header": {
+      "badge": "Handicap analysis",
+      "heading": "{team} Handicap Analysis",
+      "lead": "Analyzing {matches} matches with kill handicaps from -16.5 to +16.5."
+    },
+    "howItWorks": {
+      "heading": "How it works:",
+      "body": "For each match, we simulate how the result would change if we applied kill handicaps ranging from -16.5 to +16.5. A positive handicap helps the losing team, while a negative handicap reduces the winning team's advantage."
+    },
+    "byLeague": "Handicap Analysis by League",
+    "byPatch": "Handicap Analysis by Patch",
+    "shareText": "📊 {team} kill-score handicap analysis across {matches} matches on DotaData"
+  },
+  "patches": {
+    "title": "Dota 2 Patches — Handicap Analysis by Patch",
+    "metaDescription": "Browse Dota 2 patches and analyze team handicap statistics for each patch version.",
+    "heroBadge": "Patch insights",
+    "heroHeading": "Dota 2 Patches",
+    "heroLead": "Select a patch to analyze team handicap statistics and performance data.",
+    "shareText": "🔧 {patches} Dota 2 patches and {matches} matches — handicap analysis on DotaData",
+    "kpi": {
+      "totalPatches": "Total patches",
+      "totalMatches": "Total matches",
+      "latestPatch": "Latest patch"
+    },
+    "table": {
+      "patch": "Patch",
+      "matches": "Matches",
+      "releaseDate": "Release date",
+      "actions": "Actions",
+      "viewPatch": "View patch",
+      "noMatches": "No matches",
+      "title": "Available patches",
+      "lead": "Click on a patch to analyze team handicap statistics."
+    },
+    "guide": {
+      "title": "How to use Patch Handicap Analysis",
+      "step1Title": "Select patch",
+      "step1Body": "Choose a patch version to analyze team performance data from that meta.",
+      "step2Title": "Choose teams",
+      "step2Body": "Select one team for individual analysis or two teams for comparison.",
+      "step3Title": "Analyze data",
+      "step3Body": "View detailed handicap statistics for victories, losses, and patterns."
+    },
+    "noData": "No patch data is available in the database."
+  },
+  "patch": {
+    "header": {
+      "badge": "Patch overview",
+      "heading": "Patch {patch}",
+      "lead": "Match trends and league activity captured during the {patch} meta.",
+      "handicapAnalysis": "Handicap analysis",
+      "generalHandicapTable": "General handicap table",
+      "noMatches": "There are no matches stored for this patch yet."
+    },
+    "shareText": "🔧 Patch {patch}: {matches} matches — meta trends and league activity on DotaData"
+  },
+  "patchHandicap": {
+    "header": {
+      "badge": "Patch handicap",
+      "heading": "Patch {patch} Handicap Analysis",
+      "lead": "Analyze kill-score handicaps from -16.5 to +16.5 for teams playing during this patch.",
+      "generalTable": "General table"
+    },
+    "form": {
+      "team1": "Team 1 (required)",
+      "team2": "Team 2 (optional)",
+      "team1Placeholder": "team-slug or team-id",
+      "team2Placeholder": "team-slug or team-id",
+      "analyze": "Analyze"
+    },
+    "shareText": "📊 Patch {patch} kill-score handicap analysis on DotaData — pick your teams and dig in"
+  },
+  "patchHandicapGeneral": {
+    "header": {
+      "badge": "Patch handicap table",
+      "heading": "Patch {patch} — Handicap Table",
+      "lead": "Compare handicap success rates across all teams in this patch. Scroll horizontally to view all handicap levels.",
+      "teamComparison": "Team comparison"
+    },
+    "form": {
+      "search": "Filter teams...",
+      "filter": "Filter"
+    },
+    "shareText": "📊 Patch {patch} general handicap table — every team, every handicap level on DotaData"
+  },
+  "seasons": {
+    "title": "Dota 2 Seasons by Year — League and Team Performance",
+    "metaDescription": "Browse Dota 2 seasons by year with league and team summaries, match trends, and historical stats.",
+    "heroBadge": "Season archive",
+    "heroHeading": "Dota 2 Seasons by Year",
+    "heroLead": "Explore yearly snapshots of the competitive scene with league coverage, team activity, and monthly trends.",
+    "shareText": "📅 Dota 2 seasons archive — yearly league coverage, team activity, and trends on DotaData",
+    "viewSeason": "View season →",
+    "season": "Season"
+  },
+  "season": {
+    "metaTitle": "Dota 2 Season {year} — Leagues, Teams, and Match Trends",
+    "metaDescription": "Explore Dota 2 competitive stats for {year}, including leagues, teams, and monthly match trends.",
+    "header": {
+      "badge": "Season {year}",
+      "heading": "Dota 2 Season {year}",
+      "lead": "A year-by-year snapshot of professional Dota 2 competition. Track the most active leagues, top teams, and monthly shifts in match length and total scores.",
+      "downloadHint": "Download match data for this season."
+    },
+    "kpi": {
+      "totalMatches": "Total matches",
+      "avgDuration": "Avg duration",
+      "avgScore": "Avg score",
+      "avgFirstTower": "Avg first tower"
+    },
+    "topTeams": "Top Teams (100+ matches)",
+    "allLeagues": "All Leagues",
+    "shareText": "📅 Dota 2 Season {year}: {matches} matches — leagues, teams, and trends on DotaData",
+    "invalidYear": "Invalid season year."
+  },
+  "blog": {
+    "title": "DotaData Blog — Dota 2 Analytics and Strategy Insights",
+    "metaDescription": "Read DotaData writing on patch trends, team dynamics, league recaps, and practical Dota 2 analytics insights.",
+    "heroBadge": "Blog",
+    "heroHeading": "DotaData Blog",
+    "heroLead": "SEO-friendly analysis, strategy insight, and match breakdowns that can be expanded quickly by your AI content agent.",
+    "shareText": "📝 DotaData Blog — patch trends, team dynamics, league recaps, and Dota 2 analytics insights",
+    "noPosts": "No posts yet. Create posts via the Supabase blog_posts table.",
+    "minRead": "{minutes} min read",
+    "updated": "Updated {date}"
+  },
+  "blogPost": {
+    "headerBadge": "Article",
+    "shareText": "📝 {title} — {summary}",
+    "notFound": "Post not found",
+    "notFoundDescription": "This DotaData blog post could not be found."
+  },
+  "contact": {
+    "title": "Contact DotaData",
+    "metaDescription": "Get in touch with the DotaData team. Partnership, data licensing, or press enquiries.",
+    "heroBadge": "Contact",
+    "heroHeading": "Get in touch",
+    "heroLead": "Send us a message — we'll respond within a few working days.",
+    "form": {
+      "name": "Your name",
+      "email": "Your email",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send message",
+      "sending": "Sending…",
+      "success": "Thanks — your message has been sent.",
+      "error": "Something went wrong. Please try again."
+    }
+  },
+  "international": {
+    "title": "The International — Dota 2 World Championship",
+    "metaDescription": "Every edition of The International on DotaData — match counts, hero trends, standout performances, and historical context for Dota 2's flagship tournament.",
+    "heroBadge": "Premier event",
+    "heroHeading": "The International",
+    "heroLead": "The International is Dota 2's flagship world championship. This page brings every edition together, combining match outcomes, hero trends, and standout performances into one unified history of the event.",
+    "about": {
+      "title": "About this page:",
+      "body": "Explore all International editions, compare winrates and match lengths across years, and see the heroes and players that defined the biggest stage in Dota 2."
+    },
+    "shareText": "🏆 The International on DotaData: {editions} editions, {matches} matches — explore the full history",
+    "editionsHeading": "Every International edition",
+    "editionsLead": "Match volume, average duration, and Radiant winrate per TI."
+  },
+  "share": {
+    "shareLabel": "Share {title}"
+  }
+}

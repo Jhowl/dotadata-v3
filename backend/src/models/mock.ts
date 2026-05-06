@@ -1,0 +1,162 @@
+import { League, Match, Patch, Team } from "@shared/types/index.js";
+
+export const leagues: League[] = [
+  {
+    id: "16216",
+    slug: "the-international-2024",
+    name: "The International 2024",
+    startDate: "2024-08-21",
+    endDate: "2024-09-08",
+  },
+  {
+    id: "16224",
+    slug: "dreamleague-s24",
+    name: "DreamLeague Season 24",
+    startDate: "2024-10-12",
+    endDate: "2024-11-02",
+  },
+  {
+    id: "16242",
+    slug: "esl-one-kuala-lumpur",
+    name: "ESL One Kuala Lumpur",
+    startDate: "2024-12-02",
+    endDate: "2024-12-15",
+  },
+  {
+    id: "15982",
+    slug: "bali-major-2023",
+    name: "Bali Major 2023",
+    startDate: "2023-06-29",
+    endDate: "2023-07-09",
+  },
+  {
+    id: "15899",
+    slug: "berlin-major-2023",
+    name: "Berlin Major 2023",
+    startDate: "2023-04-26",
+    endDate: "2023-05-07",
+  },
+];
+
+export const teams: Team[] = [
+  {
+    id: "1838315",
+    slug: "team-spirit",
+    name: "Team Spirit",
+    logoUrl: null,
+  },
+  {
+    id: "8599101",
+    slug: "gaimin-gladiators",
+    name: "Gaimin Gladiators",
+    logoUrl: null,
+  },
+  {
+    id: "2163",
+    slug: "team-liquid",
+    name: "Team Liquid",
+    logoUrl: null,
+  },
+  {
+    id: "15",
+    slug: "psg-lgd",
+    name: "PSG.LGD",
+    logoUrl: null,
+  },
+  {
+    id: "716117",
+    slug: "shopify-rebellion",
+    name: "Shopify Rebellion",
+    logoUrl: null,
+  },
+];
+
+export const patches: Patch[] = [
+  {
+    id: "1",
+    patch: "7.36c",
+  },
+  {
+    id: "2",
+    patch: "7.36d",
+  },
+  {
+    id: "3",
+    patch: "7.36e",
+  },
+  {
+    id: "4",
+    patch: "7.37",
+  },
+];
+
+export const matches: Match[] = [
+  {
+    id: "7362451981",
+    leagueId: "16216",
+    duration: 41,
+    startTime: "2024-09-08 17:30",
+    direScore: 26,
+    radiantScore: 32,
+    radiantWin: true,
+    seriesType: "grand_final",
+    seriesId: "8842",
+    radiantTeamId: "1838315",
+    direTeamId: "8599101",
+    firstTowerTeamId: "1838315",
+    firstTowerTime: 418,
+    picksBans: null,
+    patchId: "1",
+  },
+  {
+    id: "7362451994",
+    leagueId: "16216",
+    duration: 38,
+    startTime: "2024-09-08 15:00",
+    direScore: 31,
+    radiantScore: 18,
+    radiantWin: false,
+    seriesType: "grand_final",
+    seriesId: "8842",
+    radiantTeamId: "2163",
+    direTeamId: "15",
+    firstTowerTeamId: "15",
+    firstTowerTime: 522,
+    picksBans: null,
+    patchId: "1",
+  },
+  {
+    id: "7362433001",
+    leagueId: "16224",
+    duration: 34,
+    startTime: "2024-11-02 19:00",
+    direScore: 12,
+    radiantScore: 29,
+    radiantWin: true,
+    seriesType: "playoffs",
+    seriesId: "9022",
+    radiantTeamId: "8599101",
+    direTeamId: "716117",
+    firstTowerTeamId: "8599101",
+    firstTowerTime: 380,
+    picksBans: null,
+    patchId: "2",
+  },
+  {
+    id: "7362433019",
+    leagueId: "16242",
+    duration: 47,
+    startTime: "2024-12-15 12:15",
+    direScore: 38,
+    radiantScore: 29,
+    radiantWin: false,
+    seriesType: "upper_final",
+    seriesId: "9101",
+    radiantTeamId: "15",
+    direTeamId: "1838315",
+    firstTowerTeamId: "1838315",
+    firstTowerTime: 472,
+    picksBans: null,
+    patchId: "3",
+  },
+];
