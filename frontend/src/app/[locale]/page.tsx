@@ -2,15 +2,14 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { HomeDashboardTable } from "@/components/home-dashboard-table";
 import { HomeTrends } from "@/components/home-trends";
 import { ShareButton } from "@/components/share-button";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { apiClient } from "@/lib/api";
 import { formatDate, formatNumber, formatPercent } from "@/lib/format";
 import { summarizeMatches } from "@/lib/stats";
-import { apiClient } from "@/lib/api";
 import type { Team } from "@shared/types/index";
 
 export function generateStaticParams() {
@@ -29,31 +28,20 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("metaDescription", { matches: "—", leagues: "—", teams: "—" }),
-    openGraph: {
-      title: t("title"),
-      type: "website",
-      url: path,
-    },
-    twitter: {
-      card: "summary_large_image" as const,
-      title: t("title"),
-    },
-    alternates: {
-      canonical: path,
-      languages: { en: "/", ru: "/ru" },
-    },
+    openGraph: { title: t("title"), type: "website", url: path },
+    twitter: { card: "summary_large_image" as const, title: t("title") },
+    alternates: { canonical: path, languages: { en: "/", ru: "/ru" } },
   };
 }
 
 export const revalidate = 86400;
 
-const fmt = (seconds: number) => `${(seconds / 60).toFixed(1)} min`;
+const fmtMin = (seconds: number) => `${(seconds / 60).toFixed(1)} min`;
 
 const isLeagueOver = (endDate: string | null) => {
   if (!endDate) return false;
   const parsed = Date.parse(endDate);
-  if (Number.isNaN(parsed)) return false;
-  return parsed <= Date.now();
+  return Number.isFinite(parsed) && parsed <= Date.now();
 };
 
 export default async function HomePage({
@@ -66,6 +54,7 @@ export default async function HomePage({
   const t = await getTranslations("home");
   const tc = await getTranslations("common");
   const currentYear = new Date().getFullYear();
+
   const [counts, leagues, patches, matches, teams, lastWinners] = await Promise.all([
     apiClient.counts(),
     apiClient.leagues.list(),
@@ -109,11 +98,10 @@ export default async function HomePage({
 
   const patchTotals = matches.reduce<Record<string, { matches: number; durationSum: number }>>(
     (acc, match) => {
-      const key = match.patchId;
-      const entry = acc[key] ?? { matches: 0, durationSum: 0 };
+      const entry = acc[match.patchId] ?? { matches: 0, durationSum: 0 };
       entry.matches += 1;
       entry.durationSum += match.duration;
-      acc[key] = entry;
+      acc[match.patchId] = entry;
       return acc;
     },
     {},
@@ -126,7 +114,10 @@ export default async function HomePage({
   }));
 
   const leagueStats = matches.reduce<
-    Record<string, { matches: number; durationSum: number; scoreSum: number; radiantWins: number }>
+    Record<
+      string,
+      { matches: number; durationSum: number; scoreSum: number; radiantWins: number }
+    >
   >((acc, match) => {
     const entry = acc[match.leagueId] ?? {
       matches: 0,
@@ -161,8 +152,8 @@ export default async function HomePage({
     .slice(0, 12);
 
   const parseMatchTime = (v: string) => {
-    const t = Date.parse(v);
-    return Number.isNaN(t) ? 0 : t;
+    const parsed = Date.parse(v);
+    return Number.isFinite(parsed) ? parsed : 0;
   };
 
   const latestMatch = matches.reduce<(typeof matches)[number] | null>((acc, m) => {
@@ -172,7 +163,6 @@ export default async function HomePage({
 
   const latestPatch = latestMatch ? patchLookup.get(latestMatch.patchId) ?? null : null;
 
-  // Curiosity card data
   const fastestLeague = yearSummary.fastestMatch
     ? leagueLookup.get(yearSummary.fastestMatch.leagueId) ?? null
     : null;
@@ -185,50 +175,49 @@ export default async function HomePage({
   const spotlightLeagues = leagueRows.slice(0, 4);
 
   return (
-    <div className="space-y-10">
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="rounded-2xl border border-border/60 bg-card/80 p-6 md:p-8">
-        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-          <div className="max-w-xl space-y-4">
+    <div className="space-y-16">
+      {/* ── Hero ───────────────────────────────────────────────────────────── */}
+      <section className="relative">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end">
+          <div className="space-y-6">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge className="bg-primary/10 text-primary">Live · {currentYear}</Badge>
+              <Badge variant="live">Live · {currentYear}</Badge>
               {latestPatch && (
-                <Badge variant="outline" className="text-muted-foreground">
-                  Patch {latestPatch.patch}
-                </Badge>
+                <Badge variant="outline">Patch {latestPatch.patch}</Badge>
               )}
+              <span className="eyebrow">Competitive Dota 2</span>
             </div>
-            <h1 className="font-display text-3xl font-semibold leading-tight md:text-4xl">
-              Competitive Dota&nbsp;2<br />analytics, match by match
+
+            <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
+              Every series.{" "}
+              <span className="text-primary">Every patch.</span>
+              <br />
+              One place.
             </h1>
-            <p className="text-muted-foreground">
-              <span className="font-semibold text-foreground">
-                {formatNumber(counts.matches)}
-              </span>{" "}
+
+            <p className="max-w-xl text-base text-muted-foreground md:text-lg">
+              <span className="text-foreground" data-num>{formatNumber(counts.matches)}</span>{" "}
               matches indexed across{" "}
-              <span className="font-semibold text-foreground">
-                {formatNumber(counts.leagues)}
-              </span>{" "}
+              <span className="text-foreground" data-num>{formatNumber(counts.leagues)}</span>{" "}
               leagues and{" "}
-              <span className="font-semibold text-foreground">
-                {formatNumber(counts.teams)}
-              </span>{" "}
-              teams.
+              <span className="text-foreground" data-num>{formatNumber(counts.teams)}</span>{" "}
+              professional teams.
               {latestMatch?.startTime && (
                 <>
-                  {" "}Last updated{" "}
+                  {" "}Updated{" "}
                   <span className="text-foreground">{formatDate(latestMatch.startTime)}</span>.
                 </>
               )}
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button asChild size="sm">
+
+            <div className="flex flex-wrap items-center gap-2">
+              <Button asChild size="default">
                 <Link href="/leagues">{tc("exploreLeagues")}</Link>
               </Button>
-              <Button asChild size="sm" variant="secondary">
+              <Button asChild size="default" variant="outline">
                 <Link href="/teams">{tc("browseTeams")}</Link>
               </Button>
-              <Button asChild size="sm" variant="outline">
+              <Button asChild size="default" variant="ghost">
                 <Link href="/patches">{tc("patchAnalysis")}</Link>
               </Button>
               <ShareButton
@@ -243,85 +232,78 @@ export default async function HomePage({
             </div>
           </div>
 
-          {/* Season at-a-glance numbers */}
-          <div className="grid grid-cols-2 gap-3 md:min-w-[240px]">
-            {[
-              {
-                label: `${currentYear} matches`,
-                value: formatNumber(yearSummary.totalMatches),
-              },
-              {
-                label: "Radiant winrate",
-                value: yearSummary.totalMatches
-                  ? formatPercent(yearSummary.radiantWinRate)
-                  : "—",
-              },
-              {
-                label: "Avg duration",
-                value: yearSummary.totalMatches ? fmt(yearSummary.avgDuration) : "—",
-              },
-              {
-                label: "Avg kills",
-                value: yearSummary.totalMatches
-                  ? yearSummary.avgScore.toFixed(1)
-                  : "—",
-              },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="rounded-xl border border-border/60 bg-background/50 p-4 text-center"
-              >
-                <p className="text-xl font-semibold text-foreground">{item.value}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{item.label}</p>
-              </div>
-            ))}
+          {/* Season at-a-glance — vertical stat block, editorial feel */}
+          <div className="card-elevated p-6">
+            <p className="eyebrow mb-4">Season {currentYear} · at a glance</p>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+              <KpiTile
+                label="Matches"
+                value={formatNumber(yearSummary.totalMatches)}
+              />
+              <KpiTile
+                label="Radiant winrate"
+                value={
+                  yearSummary.totalMatches
+                    ? formatPercent(yearSummary.radiantWinRate)
+                    : "—"
+                }
+              />
+              <KpiTile
+                label="Avg duration"
+                value={
+                  yearSummary.totalMatches ? fmtMin(yearSummary.avgDuration) : "—"
+                }
+              />
+              <KpiTile
+                label="Avg kills"
+                value={
+                  yearSummary.totalMatches ? yearSummary.avgScore.toFixed(1) : "—"
+                }
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Season curiosities ───────────────────────────────────────────── */}
+      {/* ── Season curiosities ─────────────────────────────────────────────── */}
       {yearSummary.totalMatches > 0 && (
-        <section className="space-y-4">
-          <div>
-            <h2 className="font-display text-2xl font-semibold">Season curiosities</h2>
-            <p className="text-sm text-muted-foreground">
-              Standout facts from {currentYear} competitive play — shareable in one click.
-            </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section className="space-y-6">
+          <SectionHead
+            kicker="Stats brief"
+            title="Season curiosities"
+            blurb={`Standout facts from ${currentYear} competitive play — shareable in one click.`}
+          />
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {yearSummary.fastestMatch && (
               <CuriosityCard
                 icon="⚡"
                 label="Fastest match"
-                value={fmt(yearSummary.fastestMatch.duration)}
+                value={fmtMin(yearSummary.fastestMatch.duration)}
                 context={fastestLeague?.name ?? "—"}
                 exploreUrl={fastestLeague ? `/leagues/${fastestLeague.slug}` : "/leagues"}
               />
             )}
-
             {yearSummary.longestMatch && (
               <CuriosityCard
-                icon="⏱️"
+                icon="⏱"
                 label="Longest match"
-                value={fmt(yearSummary.longestMatch.duration)}
+                value={fmtMin(yearSummary.longestMatch.duration)}
                 context={longestLeague?.name ?? "—"}
                 exploreUrl={longestLeague ? `/leagues/${longestLeague.slug}` : "/leagues"}
               />
             )}
-
             {yearSummary.maxScoreMatch && (
               <CuriosityCard
-                icon="💥"
+                icon="✦"
                 label="Highest kill game"
                 value={`${yearSummary.maxScore} kills`}
                 context={maxScoreLeague?.name ?? "—"}
                 exploreUrl={maxScoreLeague ? `/leagues/${maxScoreLeague.slug}` : "/leagues"}
               />
             )}
-
             {leagueRows[0] && (
               <CuriosityCard
-                icon="🏆"
+                icon="◆"
                 label="Most active league"
                 value={`${formatNumber(leagueRows[0].matches)} matches`}
                 context={leagueRows[0].leagueName}
@@ -332,21 +314,20 @@ export default async function HomePage({
         </section>
       )}
 
-      {/* ── Tournament spotlight ─────────────────────────────────────────── */}
+      {/* ── Tournament spotlight ───────────────────────────────────────────── */}
       {spotlightLeagues.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="font-display text-2xl font-semibold">Tournament spotlight</h2>
-              <p className="text-sm text-muted-foreground">
-                Most active leagues in {currentYear}, sorted by match volume.
-              </p>
-            </div>
-            <Button asChild variant="outline" size="sm">
-              <Link href="/leagues">All leagues</Link>
-            </Button>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section className="space-y-6">
+          <SectionHead
+            kicker="Tournaments"
+            title="In the spotlight"
+            blurb={`Most active leagues in ${currentYear}, sorted by match volume.`}
+            action={
+              <Button asChild variant="outline" size="sm">
+                <Link href="/leagues">All leagues →</Link>
+              </Button>
+            }
+          />
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {spotlightLeagues.map((league) => {
               const leagueRecord = leagueLookup.get(league.leagueId);
               const winner = lastWinners[league.leagueId];
@@ -370,8 +351,13 @@ export default async function HomePage({
         </section>
       )}
 
-      {/* ── Trends ───────────────────────────────────────────────────────── */}
-      <section className="space-y-4">
+      {/* ── Trends ─────────────────────────────────────────────────────────── */}
+      <section className="space-y-6">
+        <SectionHead
+          kicker="Signals"
+          title="Trends"
+          blurb="Monthly season patterns and patch-level signals."
+        />
         <HomeTrends
           matchVolume={matchVolume}
           yearlyMetrics={yearlyMetrics}
@@ -380,8 +366,8 @@ export default async function HomePage({
           leagues={leagues}
           matches={matches}
           labels={{
-            title: "Trends",
-            subtitle: "Monthly season patterns and patch-level signals.",
+            title: "",
+            subtitle: "",
             matchVolume: `${currentYear} match volume`,
             matchVolumeDesc: "Monthly match count (current year).",
             durationKills: "Duration & kills",
@@ -394,21 +380,57 @@ export default async function HomePage({
         />
       </section>
 
-      {/* ── League breakdown table ───────────────────────────────────────── */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="font-display text-2xl font-semibold">League breakdown</h2>
-          <p className="text-sm text-muted-foreground">
-            Top leagues by match volume — sortable by any column.
-          </p>
+      {/* ── League breakdown table ─────────────────────────────────────────── */}
+      <section className="space-y-6">
+        <SectionHead
+          kicker="Breakdown"
+          title="League depth chart"
+          blurb="Top leagues by match volume — sortable by any column."
+        />
+        <div className="card-elevated overflow-hidden">
+          <HomeDashboardTable rows={leagueRows} />
         </div>
-        <Card className="border-border/60 bg-card/80">
-          <CardContent className="pt-6">
-            <HomeDashboardTable rows={leagueRows} />
-          </CardContent>
-        </Card>
       </section>
+    </div>
+  );
+}
 
+// ─── KPI tile ─────────────────────────────────────────────────────────────────
+
+function KpiTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="stat-display text-3xl text-foreground md:text-4xl">{value}</p>
+      <p className="eyebrow mt-1.5">{label}</p>
+    </div>
+  );
+}
+
+// ─── Section head ─────────────────────────────────────────────────────────────
+
+function SectionHead({
+  kicker,
+  title,
+  blurb,
+  action,
+}: {
+  kicker?: string;
+  title: string;
+  blurb?: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-3 border-t border-border-strong/40 pt-6">
+      <div className="max-w-2xl space-y-2">
+        {kicker && <p className="eyebrow">{kicker}</p>}
+        <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
+          {title}
+        </h2>
+        {blurb && (
+          <p className="text-sm text-muted-foreground md:text-base">{blurb}</p>
+        )}
+      </div>
+      {action}
     </div>
   );
 }
@@ -427,14 +449,18 @@ function CuriosityCard({ icon, label, value, context, exploreUrl }: CuriosityCar
   return (
     <Link
       href={exploreUrl}
-      className="group flex flex-col justify-between rounded-2xl border border-border/60 bg-card/80 p-5 transition-colors hover:border-primary/40 hover:bg-card"
+      className="card-elevated focus-ring group flex flex-col justify-between p-5 transition-[transform,border-color,box-shadow] hover:-translate-y-0.5 hover:border-primary/40"
     >
       <div className="space-y-2">
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          <span>{icon}</span>
+        <p className="eyebrow flex items-center gap-2">
+          <span aria-hidden className="text-primary">
+            {icon}
+          </span>
           {label}
         </p>
-        <p className="text-3xl font-semibold text-primary">{value}</p>
+        <p className="stat-display text-3xl text-foreground" data-num>
+          {value}
+        </p>
         <p className="truncate text-sm text-muted-foreground">{context}</p>
       </div>
       <p className="mt-4 text-xs font-medium text-muted-foreground transition-colors group-hover:text-primary">
@@ -464,20 +490,18 @@ function LeagueSpotlightCard({ league, champion, isOngoing }: LeagueSpotlightCar
   return (
     <Link
       href={`/leagues/${league.leagueSlug}`}
-      className="group flex flex-col rounded-2xl border border-border/60 bg-card/80 p-5 transition-colors hover:border-primary/40 hover:bg-card"
+      className="card-elevated focus-ring group flex flex-col p-5 transition-[transform,border-color,box-shadow] hover:-translate-y-0.5 hover:border-primary/40"
       aria-label={`View ${league.leagueName} statistics`}
     >
       <div className="flex items-start justify-between gap-3">
-        <p className="line-clamp-2 font-display text-base font-semibold text-foreground group-hover:text-primary">
+        <p className="line-clamp-2 font-display text-base font-semibold leading-tight tracking-tight text-foreground group-hover:text-primary">
           {league.leagueName}
         </p>
-        {isOngoing ? (
-          <Badge className="shrink-0 bg-primary/10 text-primary">Live</Badge>
-        ) : null}
+        {isOngoing ? <Badge variant="live">Live</Badge> : null}
       </div>
 
       {champion ? (
-        <div className="mt-3 flex items-center gap-2 rounded-lg border border-border/60 bg-background/40 px-2.5 py-1.5">
+        <div className="mt-3 flex items-center gap-2 rounded-lg border border-border bg-surface-2 px-2.5 py-1.5">
           {champion.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -488,7 +512,7 @@ function LeagueSpotlightCard({ league, champion, isOngoing }: LeagueSpotlightCar
               className="h-5 w-5 rounded object-contain"
             />
           ) : (
-            <span className="text-amber-400">🏆</span>
+            <span className="text-warning">★</span>
           )}
           <span className="truncate text-xs font-medium text-foreground">
             {champion.name}
@@ -496,21 +520,23 @@ function LeagueSpotlightCard({ league, champion, isOngoing }: LeagueSpotlightCar
         </div>
       ) : null}
 
-      <div className="mt-4 grid grid-cols-2 gap-3">
+      <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3">
         {[
           { label: "Matches", value: formatNumber(league.matches) },
-          { label: "Avg duration", value: fmt(league.avgDuration) },
+          { label: "Avg duration", value: fmtMin(league.avgDuration) },
           { label: "Avg kills", value: league.avgScore.toFixed(1) },
           { label: "Radiant win", value: formatPercent(league.radiantWinRate) },
         ].map((item) => (
           <div key={item.label}>
-            <p className="text-xs text-muted-foreground">{item.label}</p>
-            <p className="mt-0.5 text-sm font-semibold text-foreground">{item.value}</p>
+            <p className="font-display text-base font-semibold tracking-tight text-foreground" data-num>
+              {item.value}
+            </p>
+            <p className="eyebrow mt-0.5">{item.label}</p>
           </div>
         ))}
       </div>
 
-      <p className="mt-4 text-xs font-medium text-muted-foreground transition-colors group-hover:text-primary">
+      <p className="mt-5 text-xs font-medium text-muted-foreground transition-colors group-hover:text-primary">
         Explore full stats →
       </p>
     </Link>
