@@ -1157,11 +1157,12 @@ async function buildSeasonSnapshotFromMatches(year: number): Promise<SeasonSnaps
         radiant_win: boolean | null;
         radiant_team_id: string | number | null;
         dire_team_id: string | number | null;
+        picks_bans: unknown;
     };
     const rows = await paginate<Row>((from, to) =>
         supabaseClient
             .from('matches')
-            .select('match_id,league_id,start_time,duration,radiant_score,dire_score,radiant_win,radiant_team_id,dire_team_id')
+            .select('match_id,league_id,start_time,duration,radiant_score,dire_score,radiant_win,radiant_team_id,dire_team_id,picks_bans')
             .gte('start_time', start)
             .lt('start_time', end)
             .order('start_time', { ascending: true })
@@ -1190,6 +1191,9 @@ async function buildSeasonSnapshotFromMatches(year: number): Promise<SeasonSnaps
     const teamStats = new Map<string, { matches: number; radiantMatches: number; direMatches: number; radiantWins: number; direWins: number }>();
     const monthlyDurationAgg = new Map<string, { sum: number; count: number }>();
     const monthlyScoreAgg = new Map<string, { sum: number; count: number }>();
+    const pickedBucket: Record<string, { heroId: string; team: number | null; total: number }> = {};
+    const bannedBucket: Record<string, { heroId: string; team: number | null; total: number }> = {};
+    const contestedBucket: Record<string, { heroId: string; team: number | null; total: number }> = {};
 
     const bumpTeam = (id: string, isRadiant: boolean, win: boolean) => {
         const current = teamStats.get(id) ?? { matches: 0, radiantMatches: 0, direMatches: 0, radiantWins: 0, direWins: 0 };
@@ -1235,7 +1239,37 @@ async function buildSeasonSnapshotFromMatches(year: number): Promise<SeasonSnaps
         if (row.dire_team_id !== null && row.dire_team_id !== undefined) {
             bumpTeam(String(row.dire_team_id), false, !row.radiant_win);
         }
+        const pickBanEntries = parsePickBans(row.picks_bans);
+        for (const entry of pickBanEntries) {
+            if (entry.is_pick) {
+                incrementBucketByHero(pickedBucket, entry);
+            } else {
+                incrementBucketByHero(bannedBucket, entry);
+            }
+            incrementBucketByHero(contestedBucket, entry);
+        }
     }
+
+    const pickBan = {
+        picked: bucketToSorted(pickedBucket, 10).map(({ heroId, total }) => ({ heroId, total })),
+        banned: bucketToSorted(bannedBucket, 10).map(({ heroId, total }) => ({ heroId, total })),
+        contested: bucketToSorted(contestedBucket, 10).map(({ heroId, total }) => ({ heroId, total })),
+    };
+
+    const playerMatchRows = supabase
+        ? await paginate<Record<string, unknown>>(
+              (from, to) =>
+                  supabaseClient
+                      .from('player_matches')
+                      .select(`${TOP_PERFORMER_ROW_SELECT},matches!inner(start_time)`)
+                      .gte('matches.start_time', start)
+                      .lt('matches.start_time', end)
+                      .order('id', { ascending: true })
+                      .range(from, to),
+              TOP_PERFORMER_PAGE_SIZE,
+          )
+        : [];
+    const topPerformers = summarizeTopPerformers(playerMatchRows);
 
     const [allLeagues, allTeams] = await Promise.all([getLeagues(), getTeams()]);
     const leagueLookup = new Map(allLeagues.map((league) => [league.id, league]));
@@ -1303,8 +1337,8 @@ async function buildSeasonSnapshotFromMatches(year: number): Promise<SeasonSnaps
         monthlyScore,
         leagues: leaguesList,
         teams: teamsList,
-        pickBan: { picked: [], banned: [], contested: [] },
-        topPerformers: [],
+        pickBan,
+        topPerformers,
     };
 }
 

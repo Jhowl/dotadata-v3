@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { JetBrains_Mono, Space_Grotesk, Source_Sans_3 } from "next/font/google";
+import { getLocale } from "next-intl/server";
 
 import "./globals.css";
 
@@ -27,21 +28,25 @@ export const metadata: Metadata = {
     icon: [
       { url: "/favicon.ico" },
       { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
-      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="DotaData Blog"
+          href="/rss.xml"
+        />
         <link
           rel="preconnect"
           href="https://cdn.cloudflare.steamstatic.com"

@@ -46,7 +46,11 @@ export async function generateMetadata({ params }: PatchPageProps) {
         twitter: { card: 'summary_large_image' as const, title, description },
         alternates: {
             canonical: path,
-            languages: { en: `/patches/${patchEntry.patch}`, ru: `/ru/patches/${patchEntry.patch}` },
+            languages: {
+                en: `/patches/${patchEntry.patch}`,
+                ru: `/ru/patches/${patchEntry.patch}`,
+                'x-default': `/patches/${patchEntry.patch}`,
+            },
         },
     };
 }

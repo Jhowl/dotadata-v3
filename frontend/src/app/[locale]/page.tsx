@@ -30,7 +30,7 @@ export async function generateMetadata({
     description: t("metaDescription", { matches: "—", leagues: "—", teams: "—" }),
     openGraph: { title: t("title"), type: "website", url: path },
     twitter: { card: "summary_large_image" as const, title: t("title") },
-    alternates: { canonical: path, languages: { en: "/", ru: "/ru" } },
+    alternates: { canonical: path, languages: { en: "/", ru: "/ru", "x-default": "/" } },
   };
 }
 

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Script from "next/script";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -66,7 +65,11 @@ export async function generateMetadata({ params }: TeamPageProps) {
     twitter: { card: "summary_large_image" as const, title, description },
     alternates: {
       canonical: path,
-      languages: { en: `/teams/${team.slug}`, ru: `/ru/teams/${team.slug}` },
+      languages: {
+        en: `/teams/${team.slug}`,
+        ru: `/ru/teams/${team.slug}`,
+        "x-default": `/teams/${team.slug}`,
+      },
     },
   };
 }
@@ -162,21 +165,24 @@ export default async function TeamPage({ params }: TeamPageProps) {
 
   return (
     <>
-      <Script id="team-ld-json" type="application/ld+json" strategy="afterInteractive">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "SportsTeam",
-          name: team.name,
-          sport: "Dota 2",
-          url: `https://dotadata.org/teams/${team.slug}`,
-          logo: team.logoUrl ?? undefined,
-          memberOf: {
-            "@type": "Organization",
-            name: "DotaData",
-            url: "https://dotadata.org",
-          },
-        })}
-      </Script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SportsTeam",
+            name: team.name,
+            sport: "Dota 2",
+            url: `https://dotadata.org/teams/${team.slug}`,
+            logo: team.logoUrl ?? undefined,
+            memberOf: {
+              "@type": "Organization",
+              name: "DotaData",
+              url: "https://dotadata.org",
+            },
+          }),
+        }}
+      />
       <div className="space-y-10">
       <Breadcrumbs
         items={[

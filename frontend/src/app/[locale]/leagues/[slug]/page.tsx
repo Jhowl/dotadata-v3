@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Script from "next/script";
 import {
   ArrowRight,
   Calendar,
@@ -111,7 +110,11 @@ export async function generateMetadata({ params }: LeaguePageProps) {
     },
     alternates: {
       canonical: path,
-      languages: { en: `/leagues/${league.slug}`, ru: `/ru/leagues/${league.slug}` },
+      languages: {
+        en: `/leagues/${league.slug}`,
+        ru: `/ru/leagues/${league.slug}`,
+        "x-default": `/leagues/${league.slug}`,
+      },
     },
   };
 }
@@ -237,53 +240,62 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
 
   return (
     <>
-      <Script id="league-ld-json" type="application/ld+json" strategy="afterInteractive">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "SportsEvent",
-          name: league.name,
-          sport: "Dota 2",
-          startDate: league.startDate ?? undefined,
-          endDate: league.endDate ?? undefined,
-          eventStatus: isOngoing
-            ? "https://schema.org/EventScheduled"
-            : "https://schema.org/EventCompleted",
-          url: `https://dotadata.org/leagues/${league.slug}`,
-          description: summary.totalMatches
-            ? `${league.name} statistics: ${formatNumber(summary.totalMatches)} matches across ${formatNumber(summary.totalTeams)} teams.`
-            : league.name,
-          organizer: {
-            "@type": "Organization",
-            name: "DotaData",
-            url: "https://dotadata.org",
-          },
-        })}
-      </Script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SportsEvent",
+            name: league.name,
+            sport: "Dota 2",
+            startDate: league.startDate ?? undefined,
+            endDate: league.endDate ?? undefined,
+            eventStatus: isOngoing
+              ? "https://schema.org/EventScheduled"
+              : "https://schema.org/EventCompleted",
+            url: `https://dotadata.org/leagues/${league.slug}`,
+            description: summary.totalMatches
+              ? `${league.name} statistics: ${formatNumber(summary.totalMatches)} matches across ${formatNumber(summary.totalTeams)} teams.`
+              : league.name,
+            organizer: {
+              "@type": "Organization",
+              name: "DotaData",
+              url: "https://dotadata.org",
+            },
+          }),
+        }}
+      />
 
-      <Script id="league-breadcrumb-ld" type="application/ld+json" strategy="afterInteractive">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://dotadata.org/" },
-            { "@type": "ListItem", position: 2, name: "Leagues", item: "https://dotadata.org/leagues" },
-            { "@type": "ListItem", position: 3, name: league.name, item: `https://dotadata.org/leagues/${league.slug}` },
-          ],
-        })}
-      </Script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://dotadata.org/" },
+              { "@type": "ListItem", position: 2, name: "Leagues", item: "https://dotadata.org/leagues" },
+              { "@type": "ListItem", position: 3, name: league.name, item: `https://dotadata.org/leagues/${league.slug}` },
+            ],
+          }),
+        }}
+      />
 
       {faqEntries.length > 0 && (
-        <Script id="league-faq-ld" type="application/ld+json" strategy="afterInteractive">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqEntries.map((entry) => ({
-              "@type": "Question",
-              name: entry.question,
-              acceptedAnswer: { "@type": "Answer", text: entry.answer },
-            })),
-          })}
-        </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: faqEntries.map((entry) => ({
+                "@type": "Question",
+                name: entry.question,
+                acceptedAnswer: { "@type": "Answer", text: entry.answer },
+              })),
+            }),
+          }}
+        />
       )}
 
       <article className="space-y-12">

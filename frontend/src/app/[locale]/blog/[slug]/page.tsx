@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { Fragment } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
@@ -99,7 +98,11 @@ export async function generateMetadata({
     description,
     alternates: {
       canonical: `${localePath}/blog/${post.slug}`,
-      languages: { en: `/blog/${post.slug}`, ru: `/ru/blog/${post.slug}` },
+      languages: {
+        en: `/blog/${post.slug}`,
+        ru: `/ru/blog/${post.slug}`,
+        "x-default": `/blog/${post.slug}`,
+      },
     },
     openGraph: {
       title,
@@ -176,9 +179,10 @@ export default async function BlogPostPage({
   return (
     <article className="space-y-10">
       <Breadcrumbs items={[{ url: "/blog", title: tNav("blog") }, { title: post.title }]} />
-      <Script id={`blog-${post.slug}-ld-json`} type="application/ld+json">
-        {JSON.stringify(jsonLd)}
-      </Script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       <section className="space-y-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
