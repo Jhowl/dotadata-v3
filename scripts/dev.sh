@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # Local dev runner.
 #
-# Default: starts backend + frontend natively in parallel (fast HMR).
-# Use --docker to bring up the full compose stack (web + api + redis) instead.
+# Default: starts backend + frontend natively in parallel (fast HMR), and
+# spins up a `dotadata-redis` docker container on 127.0.0.1:6379 if nothing
+# is already listening there. Use --docker to bring up the full compose
+# stack (web + api + redis) instead.
 #
 # Usage:
 #   ./scripts/dev.sh             # native: backend on :4000, frontend on :3000
 #   ./scripts/dev.sh --docker    # docker compose up --build
-#   ./scripts/dev.sh --backend   # only the backend
-#   ./scripts/dev.sh --frontend  # only the frontend
+#   ./scripts/dev.sh --backend   # only the backend (+ redis)
+#   ./scripts/dev.sh --frontend  # only the frontend (no redis)
 #   ./scripts/dev.sh --install   # install deps in backend/ and frontend/ first
 #   ./scripts/dev.sh --clean     # clear frontend/.next cache before starting
 
@@ -85,12 +87,46 @@ EOF
 install_deps() {
   if [[ ! -d "$REPO_ROOT/backend/node_modules" ]] || [[ "$do_install" -eq 1 ]]; then
     echo "→ installing backend deps"
-    (cd backend && npm install)
+    (cd backend && bun install)
   fi
   if [[ ! -d "$REPO_ROOT/frontend/node_modules" ]] || [[ "$do_install" -eq 1 ]]; then
     echo "→ installing frontend deps"
-    (cd frontend && npm install)
+    (cd frontend && bun install)
   fi
+}
+
+# ── Local Redis (Docker) ────────────────────────────────────────────────────
+# Backend's rate limiter + model cache use Redis when REDIS_URL is set. In
+# native dev we spin up a dedicated container exposed on 127.0.0.1:6379. The
+# compose `redis` service stays on its internal network, so we use a separate
+# container ("dotadata-redis") rather than touching compose. Skipped if
+# something already listens on :6379 or docker isn't available.
+ensure_redis() {
+  if lsof -iTCP:6379 -sTCP:LISTEN >/dev/null 2>&1; then
+    echo "→ redis: already listening on :6379"
+    return
+  fi
+  if ! command -v docker >/dev/null 2>&1; then
+    echo "  ⚠  docker not found — backend will fall back to in-memory cache" >&2
+    return
+  fi
+  if docker ps --format '{{.Names}}' | grep -qx 'dotadata-redis'; then
+    echo "→ redis: container already running"
+  elif docker ps -a --format '{{.Names}}' | grep -qx 'dotadata-redis'; then
+    echo "→ redis: starting existing container"
+    docker start dotadata-redis >/dev/null
+  else
+    echo "→ redis: launching dotadata-redis (redis:7-alpine on 127.0.0.1:6379)"
+    docker run -d --name dotadata-redis -p 127.0.0.1:6379:6379 redis:7-alpine >/dev/null
+  fi
+  # Wait up to ~5s for redis to accept connections.
+  for _ in $(seq 1 20); do
+    if docker exec dotadata-redis redis-cli ping 2>/dev/null | grep -q PONG; then
+      return
+    fi
+    sleep 0.25
+  done
+  echo "  ⚠  redis didn't respond to PING in time — continuing anyway" >&2
 }
 
 # ── Mode: docker ────────────────────────────────────────────────────────────
@@ -103,9 +139,10 @@ fi
 # ── Native modes ────────────────────────────────────────────────────────────
 ensure_env
 install_deps
+if [[ "$mode" != "frontend" ]]; then ensure_redis; fi
 
-run_backend()  { (cd backend && npm run dev); }
-run_frontend() { (cd frontend && npm run dev); }
+run_backend()  { (cd backend && bun run dev); }
+run_frontend() { (cd frontend && bun run dev); }
 
 if [[ "$mode" == "backend"  ]]; then exec bash -c "$(declare -f run_backend); run_backend"; fi
 if [[ "$mode" == "frontend" ]]; then exec bash -c "$(declare -f run_frontend); run_frontend"; fi
@@ -113,20 +150,41 @@ if [[ "$mode" == "frontend" ]]; then exec bash -c "$(declare -f run_frontend); r
 # Run both. Forward SIGINT/SIGTERM so Ctrl-C kills both children.
 echo "→ starting backend (:4000) and frontend (:3000) — Ctrl-C to stop"
 
-(cd backend && npm run dev)  & backend_pid=$!
-(cd frontend && npm run dev) & frontend_pid=$!
+(cd backend && bun run dev)  & backend_pid=$!
+(cd frontend && bun run dev) & frontend_pid=$!
+
+# Recursively kill a pid and all of its descendants. The dev script spawns
+# subshells that spawn `bun --watch` / `next dev`, and a plain `kill` on the
+# subshell PID leaves the grandchildren behind — they then squat on :3000 /
+# :4000 and break the next run. Walk the tree depth-first.
+kill_tree() {
+  local pid="$1" sig="${2:-TERM}" child
+  for child in $(pgrep -P "$pid" 2>/dev/null); do
+    kill_tree "$child" "$sig"
+  done
+  kill -"$sig" "$pid" 2>/dev/null || true
+}
 
 cleanup() {
   trap - INT TERM EXIT
   echo ""
   echo "→ shutting down…"
-  kill "$backend_pid" "$frontend_pid" 2>/dev/null || true
+  kill_tree "$backend_pid"
+  kill_tree "$frontend_pid"
   wait "$backend_pid" 2>/dev/null || true
   wait "$frontend_pid" 2>/dev/null || true
 }
 trap cleanup INT TERM EXIT
 
-wait -n "$backend_pid" "$frontend_pid"
-exit_code=$?
+# Portable replacement for `wait -n` (macOS still ships bash 3.2).
+# Poll until either child exits, then capture that one's exit code.
+while kill -0 "$backend_pid" 2>/dev/null && kill -0 "$frontend_pid" 2>/dev/null; do
+  sleep 1
+done
+if ! kill -0 "$backend_pid" 2>/dev/null; then
+  wait "$backend_pid";  exit_code=$?
+else
+  wait "$frontend_pid"; exit_code=$?
+fi
 cleanup
 exit "$exit_code"
