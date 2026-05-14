@@ -95,44 +95,48 @@
     "rightsReserved": "DotaData. Все права защищены."
   },
   "home": {
-    "title": "Аналитика и тренды профессиональной Dota 2",
-    "metaDescription": "Следите за {matches} матчами Dota 2 в {leagues} лигах и {teams} командах. Живая статистика, тренды патчей и аналитика команд на DotaData.",
-    "heroBadge": "Соревновательная аналитика",
-    "heroHeading": "Статистика про-Dota 2 — без воды.",
-    "heroLead": "DotaData покрывает {matches} матчей в {leagues} лигах и {teams} командах. Актуальный патч — {patch}.",
-    "heroLeadFallback": "DotaData покрывает {matches} матчей в {leagues} лигах и {teams} командах.",
-    "lastUpdated": "Обновлено {date}.",
+    "title": "Про-Dota 2: живой счёт, статистика лиг и мета — DotaData",
+    "metaDescription": "Трекер про-сцены Dota 2: {matches} матчей, {leagues} лиг, {teams} команд. Живые результаты, актуальная мета, топ пиков и аналитика лиг.",
     "shareText": "📊 {matches} профессиональных матчей Dota 2 в {leagues} лигах и {teams} командах — живая статистика на DotaData",
-    "currentSeason": "Сезон {year} — главное",
-    "yearMatches": "Матчей в {year}",
-    "radiantWinrate": "Винрейт Radiant",
-    "yearAvgDuration": "Средняя длительность",
-    "uniqueTeams": "Уникальных команд",
-    "ranking": {
-      "title": "Топ лиг",
-      "lead": "Лучшие лиги по активности — отсортированы по числу матчей.",
-      "league": "Лига",
+    "liveBadge": "Live · {year}",
+    "patchLabel": "Патч {patch}",
+    "heroTitle": "Про-Dota 2 — живой счёт, статистика лиг и актуальная мета",
+    "heroLead": "Покрываем <n>{matches}</n> матчей в <n>{leagues}</n> профессиональных лигах и <n>{teams}</n> командах. Живые результаты, тренды драфтов и аналитика по патчам — в реальном времени.",
+    "season": {
+      "title": "Сезон {year}",
+      "viewSeason": "Открыть сезон",
       "matches": "Матчей",
-      "teams": "Команд",
-      "lastMatch": "Последний матч"
+      "avgDuration": "Сред. длительность",
+      "avgKills": "Сред. убийства",
+      "radiantWin": "Винрейт Radiant",
+      "fastest": "Самый быстрый матч",
+      "longest": "Самый долгий матч",
+      "highestKills": "Больше всего убийств",
+      "mostActive": "Самая активная лига"
     },
-    "trending": {
-      "title": "Активные команды",
-      "lead": "Составы с наибольшим числом матчей за последние 30 дней."
+    "liveNow": {
+      "title": "Идут сейчас",
+      "viewAll": "Все лиги",
+      "empty": "Сейчас нет идущих турниров. Откройте каталог лиг, чтобы увидеть предстоящие события.",
+      "lastWinner": "Последняя победа:",
+      "matchesLabel": "матчей"
     },
-    "patches": {
-      "title": "Свежие патчи",
-      "lead": "Объём матчей по патчам — следите за сдвигами меты."
+    "latestResults": {
+      "title": "Свежие результаты"
     },
-    "blog": {
-      "title": "Из блога",
-      "lead": "Редакционные разборы и контекст патчей для сообщества.",
-      "viewAll": "Смотреть все статьи"
+    "meta": {
+      "title": "Актуальная мета",
+      "picksLabel": "{count, plural, one {# пик} few {# пика} other {# пиков}}"
     },
-    "international": {
-      "title": "The International",
-      "lead": "Главный мировой чемпионат Dota 2.",
-      "cta": "Открыть хаб TI"
+    "champions": {
+      "title": "Чемпионы {year}",
+      "trophies": "{count, plural, one {# титул} few {# титула} other {# титулов}} в этом году"
+    },
+    "trends": {
+      "title": "Тренды сезона"
+    },
+    "leagueTable": {
+      "title": "Топ лиг"
     }
   },
   "leagues": {

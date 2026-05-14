@@ -1,12 +1,12 @@
 import Image, { type StaticImageData } from "next/image";
 
-import emptyImg from "../../public/mascot/empty.png";
-import footerImg from "../../public/mascot/footer.png";
-import heroImg from "../../public/mascot/hero.png";
-import notFoundImg from "../../public/mascot/not-found.png";
-import peekLeftImg from "../../public/mascot/peek-left.png";
-import peekRightImg from "../../public/mascot/peek-right.png";
-import seasonsImg from "../../public/mascot/seasons.png";
+import emptyImg from "../../public/mascot/empty.webp";
+import footerImg from "../../public/mascot/footer.webp";
+import heroImg from "../../public/mascot/hero.webp";
+import notFoundImg from "../../public/mascot/not-found.webp";
+import peekLeftImg from "../../public/mascot/peek-left.webp";
+import peekRightImg from "../../public/mascot/peek-right.webp";
+import seasonsImg from "../../public/mascot/seasons.webp";
 
 const VARIANTS: Record<MascotVariant, { src: StaticImageData; sizes: string }> = {
   hero: { src: heroImg, sizes: "(min-width: 1280px) 30rem, (min-width: 1024px) 26rem, 0px" },

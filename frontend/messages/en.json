@@ -95,44 +95,48 @@
     "rightsReserved": "DotaData. All rights reserved."
   },
   "home": {
-    "title": "Competitive Dota 2 Analytics, Trends, and Match Intelligence",
-    "metaDescription": "Track {matches} pro Dota 2 matches across {leagues} leagues and {teams} teams. Explore live stats, patch trends, and team intelligence on DotaData.",
-    "heroBadge": "Competitive intelligence",
-    "heroHeading": "Pro Dota 2 stats, decoded.",
-    "heroLead": "DotaData covers {matches} matches across {leagues} leagues and {teams} teams. Latest patch is {patch}.",
-    "heroLeadFallback": "DotaData covers {matches} matches across {leagues} leagues and {teams} teams.",
-    "lastUpdated": "Last updated {date}.",
-    "shareText": "📊 {matches} pro Dota 2 matches across {leagues} leagues and {teams} teams — explore live stats on DotaData",
-    "currentSeason": "{year} season at a glance",
-    "yearMatches": "{year} matches",
-    "radiantWinrate": "Radiant winrate",
-    "yearAvgDuration": "Avg duration",
-    "uniqueTeams": "Unique teams",
-    "ranking": {
-      "title": "League leaderboard",
-      "lead": "Top leagues by recent activity, ranked by total matches.",
-      "league": "League",
+    "title": "Pro Dota 2 Live Scores, League Stats & Meta Analytics — DotaData",
+    "metaDescription": "Live Dota 2 pro scene tracker: {matches} matches, {leagues} leagues, {teams} teams. Real-time scores, current meta, top picks and league analytics.",
+    "shareText": "📊 {matches} pro Dota 2 matches across {leagues} leagues and {teams} teams — live stats on DotaData",
+    "liveBadge": "Live · {year}",
+    "patchLabel": "Patch {patch}",
+    "heroTitle": "Pro Dota 2 — live scores, league stats & current meta",
+    "heroLead": "Tracking <n>{matches}</n> matches across <n>{leagues}</n> professional leagues and <n>{teams}</n> teams. Live results, draft trends, and patch-level analytics, updated continuously.",
+    "season": {
+      "title": "{year} season",
+      "viewSeason": "Open season",
       "matches": "Matches",
-      "teams": "Teams",
-      "lastMatch": "Last match"
+      "avgDuration": "Avg duration",
+      "avgKills": "Avg kills",
+      "radiantWin": "Radiant winrate",
+      "fastest": "Fastest match",
+      "longest": "Longest match",
+      "highestKills": "Most kills (game)",
+      "mostActive": "Busiest league"
     },
-    "trending": {
-      "title": "Trending teams",
-      "lead": "Active rosters with the highest match volume in the last 30 days."
+    "liveNow": {
+      "title": "Live now",
+      "viewAll": "All leagues",
+      "empty": "No tournaments are live right now. Check the leagues index for upcoming events.",
+      "lastWinner": "Last win:",
+      "matchesLabel": "matches"
     },
-    "patches": {
-      "title": "Recent patches",
-      "lead": "Match volume per patch — see how the meta is shifting."
+    "latestResults": {
+      "title": "Latest results"
     },
-    "blog": {
-      "title": "From the blog",
-      "lead": "Editorial breakdowns and patch context written for the community.",
-      "viewAll": "View all posts"
+    "meta": {
+      "title": "Current meta",
+      "picksLabel": "{count, plural, one {# pick} other {# picks}}"
     },
-    "international": {
-      "title": "The International",
-      "lead": "The flagship Dota 2 world championship.",
-      "cta": "Open the TI hub"
+    "champions": {
+      "title": "{year} champions",
+      "trophies": "{count, plural, one {# title} other {# titles}} this year"
+    },
+    "trends": {
+      "title": "Season trends"
+    },
+    "leagueTable": {
+      "title": "League depth chart"
     }
   },
   "leagues": {
