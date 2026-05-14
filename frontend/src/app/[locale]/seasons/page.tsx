@@ -1,5 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
+import { Mascot } from "@/components/mascot";
 import { ShareButton } from "@/components/share-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -42,13 +43,17 @@ export default async function SeasonsPage({
 
   return (
     <div className="space-y-10">
-      <section className="space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
+      <section className="relative space-y-4">
+        <Mascot
+          variant="seasons"
+          className="pointer-events-none absolute -right-4 -top-10 hidden h-56 w-auto opacity-90 md:block lg:-right-8 lg:h-64"
+        />
+        <div className="relative flex flex-wrap items-start justify-between gap-3">
           <Badge className="w-fit bg-primary/10 text-primary">{t("heroBadge")}</Badge>
           <ShareButton title={t("heroHeading")} text={t("shareText")} url="/seasons" />
         </div>
-        <h1 className="font-display text-3xl font-semibold md:text-4xl">{t("heroHeading")}</h1>
-        <p className="max-w-2xl text-muted-foreground">{t("heroLead")}</p>
+        <h1 className="relative font-display text-3xl font-semibold md:text-4xl">{t("heroHeading")}</h1>
+        <p className="relative max-w-2xl text-muted-foreground">{t("heroLead")}</p>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

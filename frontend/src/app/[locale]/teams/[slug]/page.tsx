@@ -3,6 +3,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CommentsSection } from "@/components/comments/comments-section";
+import { Mascot } from "@/components/mascot";
 import { ShareButton } from "@/components/share-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -277,7 +278,8 @@ export default async function TeamPage({ params }: TeamPageProps) {
 
       {!summary.totalMatches ? (
         <Card className="border-border/60 bg-card/80">
-          <CardContent className="p-8 text-center">
+          <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
+            <Mascot variant="empty" className="h-36 w-auto opacity-90" />
             <h3 className="text-xl font-semibold text-foreground">No Match Data Available</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               This team doesn&apos;t have any matches in the database yet.

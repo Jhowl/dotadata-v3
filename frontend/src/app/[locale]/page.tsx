@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HomeDashboardTable } from "@/components/home-dashboard-table";
 import { HomeTrends } from "@/components/home-trends";
+import { Mascot } from "@/components/mascot";
 import { ShareButton } from "@/components/share-button";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -233,7 +234,13 @@ export default async function HomePage({
           </div>
 
           {/* Season at-a-glance — vertical stat block, editorial feel */}
-          <div className="card-elevated p-6">
+          <div className="relative">
+            <Mascot
+              variant="hero"
+              priority
+              className="pointer-events-none absolute -top-44 right-0 z-0 hidden h-72 w-auto opacity-95 lg:block xl:-top-52 xl:h-80"
+            />
+            <div className="card-elevated relative z-10 p-6">
             <p className="eyebrow mb-4">Season {currentYear} · at a glance</p>
             <div className="grid grid-cols-2 gap-x-6 gap-y-5">
               <KpiTile
@@ -260,6 +267,7 @@ export default async function HomePage({
                   yearSummary.totalMatches ? yearSummary.avgScore.toFixed(1) : "—"
                 }
               />
+            </div>
             </div>
           </div>
         </div>

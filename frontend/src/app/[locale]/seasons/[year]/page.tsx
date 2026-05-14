@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { ExportCsvButton } from "@/components/export-csv-button";
+import { Mascot } from "@/components/mascot";
 import { ShareButton } from "@/components/share-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -129,8 +130,12 @@ export default async function SeasonPage({ params }: SeasonPageProps) {
 
   return (
     <div className="space-y-10">
-      <section className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <section className="relative space-y-4">
+        <Mascot
+          variant="seasons"
+          className="pointer-events-none absolute -right-6 -top-6 hidden h-52 w-auto opacity-90 lg:block xl:-right-12 xl:h-60"
+        />
+        <div className="relative flex flex-wrap items-center justify-between gap-4">
           <Badge className="w-fit bg-primary/10 text-primary">Season {seasonYear}</Badge>
           <div className="flex flex-wrap items-center gap-3 text-sm">
             <ExportCsvButton href={`/seasons/${seasonYear}/export`} />
@@ -142,8 +147,8 @@ export default async function SeasonPage({ params }: SeasonPageProps) {
             />
           </div>
         </div>
-        <h1 className="font-display text-3xl font-semibold md:text-4xl">Dota 2 Season {seasonYear}</h1>
-        <p className="max-w-3xl text-muted-foreground">
+        <h1 className="relative font-display text-3xl font-semibold md:text-4xl">Dota 2 Season {seasonYear}</h1>
+        <p className="relative max-w-3xl text-muted-foreground">
           A year-by-year snapshot of professional Dota 2 competition. Track the most active leagues, top teams, and
           monthly shifts in match length and total scores.
         </p>

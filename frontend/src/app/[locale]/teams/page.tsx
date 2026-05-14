@@ -2,6 +2,7 @@ import Image from "next/image";
 import Script from "next/script";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
+import { Mascot } from "@/components/mascot";
 import { ShareButton } from "@/components/share-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -86,8 +87,12 @@ export default async function TeamsPage({ params, searchParams }: TeamsPageProps
         })}
       </Script>
       <div className="space-y-10">
-      <section className="space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
+      <section className="relative space-y-4">
+        <Mascot
+          variant="peekLeft"
+          className="pointer-events-none absolute -left-4 -top-8 hidden h-52 w-auto opacity-90 md:block lg:-left-8 lg:h-60"
+        />
+        <div className="relative flex flex-wrap items-start justify-between gap-3 md:pl-40 lg:pl-48">
           <Badge className="w-fit bg-primary/10 text-primary">{t("heroBadge")}</Badge>
           <ShareButton
             title={t("title")}
@@ -98,8 +103,8 @@ export default async function TeamsPage({ params, searchParams }: TeamsPageProps
             url="/teams"
           />
         </div>
-        <h1 className="font-display text-3xl font-semibold md:text-4xl">{t("heroHeading")}</h1>
-        <p className="max-w-2xl text-muted-foreground">{t("heroLead")}</p>
+        <h1 className="relative font-display text-3xl font-semibold md:pl-40 md:text-4xl lg:pl-48">{t("heroHeading")}</h1>
+        <p className="relative max-w-2xl text-muted-foreground md:pl-40 lg:pl-48">{t("heroLead")}</p>
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">

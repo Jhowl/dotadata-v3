@@ -15,6 +15,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CommentsSection } from "@/components/comments/comments-section";
 import { ExportCsvButton } from "@/components/export-csv-button";
+import { Mascot } from "@/components/mascot";
 import { ShareButton } from "@/components/share-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -417,7 +418,8 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
 
         {!summary.totalMatches ? (
           <Card className="border-border/60 bg-card/80">
-            <CardContent className="p-8 text-center">
+            <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
+              <Mascot variant="empty" className="h-36 w-auto opacity-90" />
               <h2 className="text-xl font-semibold text-foreground">No Match Data Available</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 This league doesn&apos;t have any matches in the database yet.
