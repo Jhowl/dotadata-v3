@@ -34,14 +34,18 @@ const schema = z.object({
   COOKIE_DOMAIN: z.string().min(1).optional(),
 });
 
-// Accept legacy NEXT_PUBLIC_-prefixed Supabase names so the same .env can
-// power both /web (Next.js) and /web-v2 (this backend).
+// Treat empty strings as undefined so `.env.example`-style blank entries
+// (KEY=) don't trip `.optional()` fields. Accept legacy NEXT_PUBLIC_-prefixed
+// Supabase names so the same .env can power both /web (Next.js) and /web-v2.
+const blankToUndef = (v: string | undefined) => (v === "" ? undefined : v);
+const rawEnv: Record<string, string | undefined> = {};
+for (const [k, v] of Object.entries(process.env)) rawEnv[k] = blankToUndef(v);
+
 const normalized = {
-  ...process.env,
-  SUPABASE_URL:
-    process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL,
+  ...rawEnv,
+  SUPABASE_URL: rawEnv.SUPABASE_URL ?? rawEnv.NEXT_PUBLIC_SUPABASE_URL,
   SUPABASE_ANON_KEY:
-    process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    rawEnv.SUPABASE_ANON_KEY ?? rawEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 };
 
 const parsed = schema.safeParse(normalized);

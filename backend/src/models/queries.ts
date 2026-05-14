@@ -1,6 +1,7 @@
 import { withRedisCache } from '@/services/redis.js';
 import { leagues as mockLeagues, matches as mockMatches, patches as mockPatches, teams as mockTeams } from '@/models/mock.js';
 import { supabase } from '@/services/supabase.js';
+import { logger } from '@/services/logger.js';
 import type { Hero, League, Match, Patch, PickBanEntry, PickBanStat, Team } from '@shared/types/index.js';
 
 const supabaseClient = supabase as NonNullable<typeof supabase>;
@@ -44,7 +45,11 @@ async function paginate<T>(
     const out: T[] = [];
     for (let from = 0; ; from += pageSize) {
         const { data, error } = await buildPage(from, from + pageSize - 1);
-        if (error || !data || data.length === 0) break;
+        if (error) {
+            logger.error({ err: error, from, pageSize }, 'paginate: supabase error');
+            break;
+        }
+        if (!data || data.length === 0) break;
         out.push(...data);
         if (data.length < pageSize) break;
     }
