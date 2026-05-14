@@ -22,6 +22,15 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        source: "/mascot/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: `public, max-age=${ONE_YEAR}, immutable`,
+          },
+        ],
+      },
+      {
         source: "/:path(favicon\\.ico|favicon\\.svg|favicon-16x16\\.png|favicon-32x32\\.png|apple-touch-icon\\.png)",
         headers: [
           {
