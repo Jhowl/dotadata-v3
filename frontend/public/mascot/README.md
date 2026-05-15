@@ -34,10 +34,21 @@ responsive srcsets at request time.
    loss, or bump to 90 if you see banding.
 4. Overwrite the matching `<variant>.webp` here. No code change needed.
 
-## `favicon.png`
+## Favicon set
 
-This is a high-resolution source for the site favicon, not a mascot variant.
-Use it with https://realfavicongenerator.net (or similar) to produce
-`favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `favicon-16x16.png`,
-`favicon-32x32.png`, then drop those into `frontend/public/` and delete this
-source file (or keep it as a working asset).
+The favicon, 16/32 PNGs, and apple-touch icon live at `frontend/public/`
+(`favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`,
+`apple-touch-icon.png`) and at `frontend/src/app/favicon.ico` (Next.js
+file convention). To regenerate: re-run the favicon prompt to produce a
+1200×1200 PNG with transparent background, then either upload it to
+https://realfavicongenerator.net and overwrite the files, or run:
+
+```bash
+sips -z 32 32 source.png --out tmp32.png
+sips -z 16 16 source.png --out tmp16.png
+sips -z 180 180 source.png --out apple-touch-icon.png
+sips -s format ico tmp32.png --out favicon.ico
+cp tmp32.png favicon-32x32.png
+cp tmp16.png favicon-16x16.png
+rm tmp32.png tmp16.png
+```

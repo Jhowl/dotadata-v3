@@ -120,7 +120,7 @@ export async function generateMetadata({ params }: LeaguePageProps) {
   };
 }
 
-export const revalidate = 86400;
+export const dynamic = "force-dynamic";
 
 export default async function LeaguePage({ params }: LeaguePageProps) {
   const { locale, slug } = await params;
@@ -192,7 +192,11 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
   const runnerUpTeam = champion?.runnerUpTeamId
     ? teamLookup.get(champion.runnerUpTeamId) ?? null
     : null;
-  const showChampion = Boolean(champion && championTeam && !isOngoing);
+  // Only crown a champion when the league actually looks finished. `concluded`
+  // is inferred backend-side (final is a Bo5 or a weekend game + 2 days idle)
+  // because there's no OpenDota "tournament over" flag — without it, an
+  // in-progress league like 19696 would show a champion mid-tournament.
+  const showChampion = Boolean(champion && championTeam && champion.concluded);
   const seriesScoreLabel = champion
     ? `${champion.winnerWins}–${champion.runnerUpWins}`
     : null;

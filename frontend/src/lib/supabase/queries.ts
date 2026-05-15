@@ -58,8 +58,11 @@ export type LeagueChampion = {
   runnerUpWins: number;
   seriesId: string | null;
   seriesType: string | null;
+  finalSeriesGames: number;
   finalMatchId: string;
   finalMatchStartTime: string | null;
+  /** Whether the league looks genuinely finished (inferred — see backend). */
+  concluded: boolean;
   roster: LeagueChampionPlayer[];
 };
 

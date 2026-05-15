@@ -90,7 +90,7 @@ export async function generateMetadata({ params }: PickBanPageProps) {
   };
 }
 
-export const revalidate = 86400;
+export const dynamic = "force-dynamic";
 
 export default async function LeaguePickBanPage({ params }: PickBanPageProps) {
   const { locale, slug } = await params;

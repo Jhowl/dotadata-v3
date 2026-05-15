@@ -31,10 +31,23 @@ before pointing at production data.
 
 ## Deploy
 
+Two paths depending on where the build runs:
+
+**Build locally, ship images (recommended for small hosts):**
+```bash
+./scripts/deploy-local.sh
+```
+Builds `dotadata-api` and `dotadata-web` on your machine for `linux/amd64`,
+streams them gzip'd over SSH (`docker save | ssh 'docker load'`), syncs
+`docker-compose.yml`, then runs `docker compose up -d` on the host. Defaults
+target `root@138.197.21.64:/srv/dotadata`; override via `DEPLOY_HOST` /
+`DEPLOY_PATH`. The host must already have `.env` populated; the script never
+touches it.
+
+**Build remotely (rsync the repo, build on host):**
 ```bash
 DEPLOY_HOST=deploy@your-host DEPLOY_PATH=/srv/dotadata ./scripts/deploy.sh
 ```
-
 `scripts/deploy.sh` rsyncs the repo (excluding `.git`, `node_modules`,
 build outputs, and `.env*`), then SSHes in to run
 `docker compose build && up -d` and prune old images. Pre-existing `.env`

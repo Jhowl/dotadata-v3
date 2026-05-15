@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: TeamPageProps) {
   };
 }
 
-export const revalidate = 86400;
+export const dynamic = "force-dynamic";
 
 export default async function TeamPage({ params }: TeamPageProps) {
   const { locale, slug } = await params;

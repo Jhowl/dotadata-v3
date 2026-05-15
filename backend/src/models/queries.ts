@@ -476,8 +476,14 @@ export type LeagueChampion = {
     runnerUpWins: number;
     seriesId: string | null;
     seriesType: string | null;
+    finalSeriesGames: number;
     finalMatchId: string;
     finalMatchStartTime: string | null;
+    /**
+     * Whether the league looks genuinely finished. There's no OpenDota signal
+     * for "tournament over", so this is inferred — see getLeagueChampion.
+     */
+    concluded: boolean;
     roster: LeagueChampionPlayer[];
 };
 
@@ -790,6 +796,24 @@ export async function getLeagueChampion(leagueId: string): Promise<LeagueChampio
         const winnerWins = tallies.get(winnerTeamId) ?? 0;
         const runnerUpWins = runnerUpTeamId ? tallies.get(runnerUpTeamId) ?? 0 : 0;
 
+        // --- "has the league actually finished?" heuristic --------------------
+        // The most recent series is always *a* series, but while a tournament is
+        // still running that's just the latest group-stage / bracket game, not
+        // the grand final — so blindly crowning its winner is wrong (e.g. league
+        // 19696 showed a champion mid-tournament). OpenDota has no "tournament
+        // over" flag, so we infer it from data we already have:
+        //   • the bracket has been idle for 2+ days (no fresh matches), and
+        //   • the final looks like a real grand final — a Best-of-5 (the winner
+        //     needed 3+ game wins) or a game played on a weekend (finals day),
+        //     rather than a mid-week group-stage match.
+        const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000;
+        const decidingMs = parseTime(decidingMatch.start_time);
+        const idleForTwoDays = decidingMs > 0 && Date.now() - decidingMs > TWO_DAYS_MS;
+        const decidingWeekday = decidingMs > 0 ? new Date(decidingMs).getUTCDay() : -1;
+        const playedOnWeekend = decidingWeekday === 0 || decidingWeekday === 6;
+        const looksLikeGrandFinal = winnerWins >= 3 || playedOnWeekend;
+        const concluded = idleForTwoDays && looksLikeGrandFinal;
+
         // Roster: pull player_matches for the deciding match for the winning team.
         const { data: rosterRows, error: rosterError } = await supabaseClient
             .from('player_matches')
@@ -816,8 +840,10 @@ export async function getLeagueChampion(leagueId: string): Promise<LeagueChampio
             runnerUpWins,
             seriesId: finalSeries.seriesId,
             seriesType: finalSeries.seriesType,
+            finalSeriesGames: finalMatches.length,
             finalMatchId: decidingMatch.match_id,
             finalMatchStartTime: decidingMatch.start_time,
+            concluded,
             roster,
         };
     });
