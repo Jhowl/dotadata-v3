@@ -1,15 +1,16 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { CSSProperties, ReactNode, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
 interface ClientChartFrameProps {
   className: string;
   children: ReactNode;
+  style?: CSSProperties;
 }
 
-export function ClientChartFrame({ className, children }: ClientChartFrameProps) {
+export function ClientChartFrame({ className, children, style }: ClientChartFrameProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -20,6 +21,7 @@ export function ClientChartFrame({ className, children }: ClientChartFrameProps)
     return (
       <div
         aria-hidden="true"
+        style={style}
         className={cn(
           className,
           "rounded-xl border border-border/40 bg-muted/20",
@@ -28,5 +30,9 @@ export function ClientChartFrame({ className, children }: ClientChartFrameProps)
     );
   }
 
-  return <div className={className}>{children}</div>;
+  return (
+    <div className={className} style={style}>
+      {children}
+    </div>
+  );
 }

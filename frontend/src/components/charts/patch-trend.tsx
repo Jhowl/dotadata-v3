@@ -3,6 +3,8 @@
 import { memo, useMemo } from "react";
 
 import {
+  CartesianGrid,
+  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -19,6 +21,8 @@ interface PatchTrendProps {
   stats: Array<{ patchId: string; matches: number; avgDuration: number }>;
 }
 
+const AXIS_TICK = { fontSize: 12, fill: "var(--muted-foreground)" } as const;
+const LEGEND_STYLE = { fontSize: 12, color: "var(--muted-foreground)" } as const;
 const tooltipContentStyle = {
   borderRadius: 12,
   borderColor: "rgba(15, 23, 42, 0.8)",
@@ -49,21 +53,36 @@ function PatchTrendChart({ patches, stats }: PatchTrendProps) {
   const showDots = data.length <= 32;
 
   return (
-    <ClientChartFrame className="h-[280px] min-w-0">
+    <ClientChartFrame className="h-[300px] min-w-0">
       <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-        <LineChart data={data} margin={{ left: 8, right: 8 }}>
-          <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-          <YAxis yAxisId="left" tick={{ fontSize: 12 }} allowDecimals={false} />
-          <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
+        <LineChart data={data} margin={{ left: 8, right: 8, top: 8 }}>
+          <CartesianGrid strokeDasharray="4 4" opacity={0.2} />
+          <XAxis dataKey="name" tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: "var(--border)" }} />
+          <YAxis
+            yAxisId="left"
+            tick={AXIS_TICK}
+            allowDecimals={false}
+            tickLine={false}
+            axisLine={{ stroke: "var(--border)" }}
+          />
+          <YAxis
+            yAxisId="right"
+            orientation="right"
+            tick={AXIS_TICK}
+            tickLine={false}
+            axisLine={{ stroke: "var(--border)" }}
+          />
           <Tooltip
             contentStyle={tooltipContentStyle}
             itemStyle={tooltipItemStyle}
             labelStyle={tooltipLabelStyle}
           />
+          <Legend wrapperStyle={LEGEND_STYLE} iconType="circle" />
           <Line
             yAxisId="left"
             type="monotone"
             dataKey="matches"
+            name="Matches"
             stroke="var(--chart-2)"
             strokeWidth={2}
             dot={showDots ? { r: 3 } : false}
@@ -73,6 +92,7 @@ function PatchTrendChart({ patches, stats }: PatchTrendProps) {
             yAxisId="right"
             type="monotone"
             dataKey="duration"
+            name="Avg duration (min)"
             stroke="var(--chart-3)"
             strokeWidth={2}
             dot={showDots ? { r: 3 } : false}

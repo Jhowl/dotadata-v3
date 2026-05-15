@@ -23,6 +23,7 @@ interface YearlyMetricLineProps {
   color: string;
 }
 
+const AXIS_TICK = { fontSize: 12, fill: "var(--muted-foreground)" } as const;
 const tooltipContentStyle = {
   borderRadius: 12,
   borderColor: "rgba(15, 23, 42, 0.8)",
@@ -38,8 +39,8 @@ function YearlyMetricLineChart({ data, color }: YearlyMetricLineProps) {
     <ClientChartFrame className="h-[260px] min-w-0">
       <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
         <LineChart data={data} margin={{ left: 8, right: 8, top: 8 }}>
-          <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-          <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
+          <XAxis dataKey="month" tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: "var(--border)" }} />
+          <YAxis tick={AXIS_TICK} allowDecimals={false} tickLine={false} axisLine={{ stroke: "var(--border)" }} />
           <Tooltip
             contentStyle={tooltipContentStyle}
             itemStyle={tooltipItemStyle}

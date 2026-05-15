@@ -69,6 +69,7 @@
     "teams": "Teams",
     "seasons": "Seasons",
     "international": "The International",
+    "dreamleague": "DreamLeague",
     "patches": "Patches",
     "contact": "Contact"
   },
@@ -487,6 +488,20 @@
     "shareText": "🏆 The International on DotaData: {editions} editions, {matches} matches — explore the full history",
     "editionsHeading": "Every International edition",
     "editionsLead": "Match volume, average duration, and Radiant winrate per TI."
+  },
+  "dreamleague": {
+    "title": "DreamLeague — every season of Dota 2's longest-running tour",
+    "metaDescription": "Every DreamLeague season on DotaData — match counts, hero trends, top performers, and historical context for one of Dota 2's most consistent tournament series.",
+    "heroBadge": "Tour series",
+    "heroHeading": "DreamLeague",
+    "heroLead": "DreamLeague is one of the longest-running Dota 2 league series, hosted by DreamHack and ESL. This page rolls every season into one view — match outcomes, hero trends, and standout performances across the entire run.",
+    "about": {
+      "title": "About this page:",
+      "body": "Browse every DreamLeague season, compare winrates and match lengths across years, and see the heroes and players who defined the tour."
+    },
+    "shareText": "🏆 DreamLeague on DotaData: {editions} seasons, {matches} matches — explore the full history",
+    "editionsHeading": "Every DreamLeague season",
+    "editionsLead": "Match volume, average duration, and Radiant winrate per DreamLeague season."
   },
   "share": {
     "shareLabel": "Share {title}"

@@ -8,6 +8,7 @@ const links = [
   { href: "/teams", labelKey: "teams" },
   { href: "/seasons", labelKey: "seasons" },
   { href: "/the-international", labelKey: "international" },
+  { href: "/dreamleague", labelKey: "dreamleague" },
   { href: "/patches", labelKey: "patches" },
   { href: "/contact", labelKey: "contact" },
 ] as const;

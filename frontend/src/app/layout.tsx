@@ -24,11 +24,19 @@ const GA_MEASUREMENT_ID = "G-NQ2YE7VPYJ";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://dotadata.org"),
+  manifest: "/site.webmanifest",
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
     ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  openGraph: {
+    images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630 }],
+  },
+  twitter: {
+    images: ["/twitter-image.jpg"],
   },
 };
 

@@ -44,6 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   entries.push(...localizedEntry("/teams", { changeFrequency: "daily", priority: 0.9, lastModified: now }));
   entries.push(...localizedEntry("/seasons", { changeFrequency: "weekly", priority: 0.8, lastModified: now }));
   entries.push(...localizedEntry("/the-international", { changeFrequency: "weekly", priority: 0.8, lastModified: now }));
+  entries.push(...localizedEntry("/dreamleague", { changeFrequency: "weekly", priority: 0.8, lastModified: now }));
   entries.push(...localizedEntry("/patches", { changeFrequency: "weekly", priority: 0.7, lastModified: now }));
   entries.push(...localizedEntry("/contact", { changeFrequency: "monthly", priority: 0.5, lastModified: now }));
   entries.push(...localizedEntry("/blog", { changeFrequency: "weekly", priority: 0.8, lastModified: now }));

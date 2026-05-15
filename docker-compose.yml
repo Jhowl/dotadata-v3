@@ -12,6 +12,7 @@ services:
       retries: 5
 
   api:
+    image: dotadata-api:latest
     build:
       context: .
       dockerfile: backend/Dockerfile
@@ -34,14 +35,17 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    networks: [internal, public]
+    networks: [internal]
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
 
   web:
+    image: dotadata-web:latest
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -50,13 +54,12 @@ services:
       API_INTERNAL_BASE_URL: http://api:4000/api/v1
     depends_on:
       - api
-    networks: [public]
+    networks: [internal]
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
 
 volumes:
   redis-data:
 
 networks:
   internal:
-  public:

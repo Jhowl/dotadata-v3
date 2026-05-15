@@ -69,6 +69,7 @@
     "teams": "Команды",
     "seasons": "Сезоны",
     "international": "The International",
+    "dreamleague": "DreamLeague",
     "patches": "Патчи",
     "contact": "Контакты"
   },
@@ -487,6 +488,20 @@
     "shareText": "🏆 The International на DotaData: {editions} эпизодов, {matches} матчей — вся история события",
     "editionsHeading": "Все эпизоды The International",
     "editionsLead": "Объём матчей, средняя длительность и винрейт Radiant по каждому TI."
+  },
+  "dreamleague": {
+    "title": "DreamLeague — все сезоны самой долгоиграющей серии Dota 2",
+    "metaDescription": "Все сезоны DreamLeague на DotaData: число матчей, тренды героев, рекорды игроков и исторический контекст одной из самых стабильных турнирных серий Dota 2.",
+    "heroBadge": "Серия туров",
+    "heroHeading": "DreamLeague",
+    "heroLead": "DreamLeague — одна из самых долгоиграющих лиговых серий Dota 2 от DreamHack и ESL. На этой странице собраны все сезоны: результаты матчей, тренды героев и рекорды игроков за всю историю.",
+    "about": {
+      "title": "Об этой странице:",
+      "body": "Все сезоны DreamLeague, винрейты и длительности матчей по годам, герои и игроки, определившие серию."
+    },
+    "shareText": "🏆 DreamLeague на DotaData: {editions} сезонов, {matches} матчей — вся история серии",
+    "editionsHeading": "Все сезоны DreamLeague",
+    "editionsLead": "Объём матчей, средняя длительность и винрейт Radiant по каждому сезону DreamLeague."
   },
   "share": {
     "shareLabel": "Поделиться: {title}"
