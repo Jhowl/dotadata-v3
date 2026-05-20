@@ -55,6 +55,15 @@ const isLeagueLive = (startDate: string | null, endDate: string | null) => {
   return true;
 };
 
+// A league's endDate is often stale or wrong, which hides leagues that are
+// still playing (e.g. 19696). Recent match activity is the reliable signal:
+// a game within the last 2 days means the tournament is effectively live.
+const RECENT_MATCH_MS = 2 * 24 * 60 * 60 * 1000;
+const hasRecentMatches = (lastMatchTime: string | null | undefined) => {
+  const t = parseTime(lastMatchTime);
+  return t != null && Date.now() - t < RECENT_MATCH_MS;
+};
+
 const isLeagueFinishedInYear = (endDate: string | null, year: number) => {
   const end = parseTime(endDate);
   if (!end || end >= Date.now()) return false;
@@ -118,9 +127,20 @@ export default async function HomePage({
     ? leagueLookup.get(yearSummary.maxScoreMatch.leagueId) ?? null
     : null;
 
+  const lastMatchTimeOf = (leagueId: string) =>
+    summaryByLeague.get(leagueId)?.lastMatchTime ?? null;
+
   const liveLeagues = leagues
-    .filter((l) => isLeagueLive(l.startDate, l.endDate))
-    .sort((a, b) => (parseTime(b.startDate) ?? 0) - (parseTime(a.startDate) ?? 0))
+    .filter(
+      (l) =>
+        isLeagueLive(l.startDate, l.endDate) ||
+        hasRecentMatches(lastMatchTimeOf(l.id)),
+    )
+    .sort(
+      (a, b) =>
+        (parseTime(lastMatchTimeOf(b.id)) ?? parseTime(b.startDate) ?? 0) -
+        (parseTime(lastMatchTimeOf(a.id)) ?? parseTime(a.startDate) ?? 0),
+    )
     .slice(0, 4);
 
   const latestMatches = matches

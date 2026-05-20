@@ -6,6 +6,11 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
 const COMMENT_BODY_MAX = 2000;
+// Backend mounts everything under /api/v1; relative "/api/..." fetches hit
+// Caddy which forwards to api:4000 but doesn't rewrite the path, so we need
+// the full prefix here. Matches what NEXT_PUBLIC_API_BASE_URL points at.
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
 
 type Comment = {
   id: string;
@@ -52,17 +57,22 @@ export function CommentsSection({ entityType, entityId }: Props) {
       try {
         const [commentsRes, meRes] = await Promise.all([
           fetch(
-            `/api/comments?entity_type=${encodeURIComponent(entityType)}&entity_id=${encodeURIComponent(entityId)}`,
-            { cache: "no-store" },
+            `${API_BASE}/comments?entityType=${encodeURIComponent(entityType)}&entityId=${encodeURIComponent(entityId)}`,
+            { cache: "no-store", credentials: "include" },
           ),
-          fetch("/api/auth/me", { cache: "no-store" }),
+          fetch(`${API_BASE}/auth/me`, { cache: "no-store", credentials: "include" }),
         ]);
         if (!commentsRes.ok) throw new Error(String(commentsRes.status));
-        const data = (await commentsRes.json()) as { comments: Comment[] };
-        const me = meRes.ok ? ((await meRes.json()) as { steamid: string | null }) : { steamid: null };
+        // Backend returns the list as a bare Comment[] (controllers/comments.controller.ts).
+        const data = (await commentsRes.json()) as Comment[];
+        // /auth/me returns the AppUser shape ({ steamid64, ... }) or null
+        // when the session is missing/invalid — not { steamid }.
+        const me = meRes.ok
+          ? ((await meRes.json()) as { steamid64: string } | null)
+          : null;
         if (!cancelled) {
-          setComments(data.comments ?? []);
-          setCurrentSteamid(me.steamid);
+          setComments(Array.isArray(data) ? data : []);
+          setCurrentSteamid(me?.steamid64 ?? null);
         }
       } catch {
         if (!cancelled) setLoadError(t("loadError"));
@@ -85,17 +95,25 @@ export function CommentsSection({ entityType, entityId }: Props) {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      const res = await fetch("/api/comments", {
+      const res = await fetch(`${API_BASE}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ entity_type: entityType, entity_id: entityId, body: trimmed }),
+        credentials: "include",
+        body: JSON.stringify({ entityType, entityId, body: trimmed }),
       });
-      const data = (await res.json()) as { comment?: Comment; error?: string };
-      if (!res.ok || !data.comment) {
-        setSubmitError(data.error ?? t("submitError"));
+      // Success: the created Comment as the bare body. Failure: the central
+      // error handler shape `{ error: { code, message } }`.
+      const payload = (await res.json().catch(() => null)) as
+        | Comment
+        | { error?: { code?: string; message?: string } }
+        | null;
+      if (!res.ok || !payload || !("id" in payload)) {
+        const message =
+          payload && "error" in payload ? payload.error?.message : undefined;
+        setSubmitError(message ?? t("submitError"));
         return;
       }
-      setComments((prev) => [data.comment as Comment, ...(prev ?? [])]);
+      setComments((prev) => [payload, ...(prev ?? [])]);
       setBody("");
     } catch {
       setSubmitError(t("submitError"));
@@ -107,8 +125,9 @@ export function CommentsSection({ entityType, entityId }: Props) {
   const onDelete = async (id: string) => {
     if (typeof window !== "undefined" && !window.confirm(t("deleteConfirm"))) return;
     try {
-      const res = await fetch(`/api/comments?id=${encodeURIComponent(id)}`, {
+      const res = await fetch(`${API_BASE}/comments/${encodeURIComponent(id)}`, {
         method: "DELETE",
+        credentials: "include",
       });
       if (!res.ok) return;
       setComments((prev) => (prev ?? []).filter((c) => c.id !== id));
@@ -150,8 +169,7 @@ export function CommentsSection({ entityType, entityId }: Props) {
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border/60 bg-background/50 p-4">
           <p className="text-sm text-muted-foreground">{t("signInPrompt")}</p>
           <Button asChild variant="outline" size="sm">
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a href="/api/auth/steam/login">{t("signInCta")}</a>
+            <a href={`${API_BASE}/auth/steam/login`}>{t("signInCta")}</a>
           </Button>
         </div>
       )}

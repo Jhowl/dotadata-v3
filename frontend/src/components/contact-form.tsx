@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 type FormState = "idle" | "submitting" | "success" | "error";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Backend routes live under /api/v1; relative "/api/contact" 404s.
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
 
 export function ContactForm() {
   const [state, setState] = useState<FormState>("idle");
@@ -64,7 +66,7 @@ export function ContactForm() {
 
     try {
       setState("submitting");
-      const response = await fetch("/api/contact", {
+      const response = await fetch(`${API_BASE}/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
