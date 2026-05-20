@@ -28,5 +28,11 @@ COPY --from=builder /app/frontend/package.json ./package.json
 COPY --from=builder /app/frontend/node_modules ./node_modules
 COPY --from=builder /app/frontend/public ./public
 COPY --from=builder /app/frontend/.next ./.next
+# next.config and i18n config are read at runtime by `next start` — without
+# them the image optimizer falls back to defaults (rejects every external URL
+# with `"url" parameter is not allowed`) and next-intl can't resolve locales.
+COPY --from=builder /app/frontend/next.config.ts ./next.config.ts
+COPY --from=builder /app/frontend/src/i18n ./src/i18n
+COPY --from=builder /app/frontend/messages ./messages
 EXPOSE 3000
 CMD ["npm", "start"]

@@ -76,8 +76,12 @@ export async function generateMetadata({ params }: TeamPageProps) {
   };
 }
 
-// 24h ISR. See note on league slug page.
-export const revalidate = 86400;
+// SSR every request. The locale layout renders SiteAuth which reads cookies
+// and fetches /auth/me with `cache: 'no-store'`, both of which mark the route
+// as dynamic. Combining that with `revalidate` throws DYNAMIC_SERVER_USAGE at
+// render time, so we declare the dynamic intent explicitly. The backend's
+// Redis cache still absorbs repeated load.
+export const dynamic = "force-dynamic";
 
 export default async function TeamPage({ params }: TeamPageProps) {
   const { locale, slug } = await params;
@@ -85,12 +89,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
   const t = await getTranslations("team");
   const tc = await getTranslations("common");
   const team = await getTeamBySlug(slug);
-
-  // Real 404 (not a 200 with thin content) so Search Console doesn't classify
-  // missing-team pages as soft 404s. Also 404 teams that exist in the DB but
-  // have no matches recorded — the page would otherwise render an empty-state
-  // body that Google equally flags as soft 404.
-  if (!team || !team.lastMatchTime) {
+  if (!team) {
     notFound();
   }
 
@@ -103,6 +102,17 @@ export default async function TeamPage({ params }: TeamPageProps) {
     getLeagues(),
     getLeagueLastWinners(),
   ]);
+
+  // Summary is the authoritative "has content" signal — getTeamSummary checks
+  // both team_snapshots and team_summary_view. A null result means the team
+  // has no recorded matches anywhere. 404 those so the empty-state body
+  // doesn't get classified as a soft 404 by Search Console.
+  // (Earlier versions checked team.lastMatchTime, but the view's
+  // last_match_time can be null for teams that have matches but aren't yet in
+  // the aggregated view.)
+  if (!teamSummary) {
+    notFound();
+  }
 
   // Compute championships: leagues this team won (last-match winner heuristic) where the league has ended.
   const leagueLookup = new Map(leagues.map((l) => [l.id, l]));
@@ -419,10 +429,9 @@ export default async function TeamPage({ params }: TeamPageProps) {
                       const heroImage = buildHeroImageUrl(entry.heroId);
                       return (
                         <div key={entry.heroId} className="flex items-center gap-3 rounded-lg border border-border/60 bg-background/40 p-3">
-                          <div className="h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
+                          <div className="relative h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
                             {heroImage ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img src={heroImage} alt={heroName} className="h-full w-full object-cover" />
+                              <Image src={heroImage} alt={heroName} fill sizes="32px" className="object-cover" />
                             ) : (
                               <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
                                 N/A
@@ -469,10 +478,9 @@ export default async function TeamPage({ params }: TeamPageProps) {
                     return (
                       <div key={entry.key} className="rounded-lg border border-border/60 bg-background/40 p-4">
                         <div className="flex items-start gap-4">
-                          <div className="h-14 w-14 overflow-hidden rounded-lg border border-border/60 bg-muted">
+                          <div className="relative h-14 w-14 overflow-hidden rounded-lg border border-border/60 bg-muted">
                             {heroImage ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img src={heroImage} alt={heroName} className="h-full w-full object-cover" />
+                              <Image src={heroImage} alt={heroName} fill sizes="56px" className="object-cover" />
                             ) : (
                               <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
                                 N/A

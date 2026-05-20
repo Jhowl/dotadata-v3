@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
@@ -31,7 +32,7 @@ export async function SiteAuth() {
   if (!user) {
     return (
       <Button asChild variant="outline" size="sm">
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        {/* External backend URL — Next's <Link> isn't applicable here. */}
         <a href={`${API_PUBLIC}/auth/steam/login`}>
           <SteamIcon />
           {t("signInSteam")}
@@ -45,12 +46,12 @@ export async function SiteAuth() {
   return (
     <form action={`${API_PUBLIC}/auth/logout`} method="post" className="flex items-center gap-2">
       {user.avatarUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={user.avatarUrl}
           alt=""
           width={28}
           height={28}
+          unoptimized
           className="h-7 w-7 rounded-full border border-border/60 object-cover"
         />
       ) : null}

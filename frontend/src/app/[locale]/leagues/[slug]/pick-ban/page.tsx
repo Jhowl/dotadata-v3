@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Script from "next/script";
 import { notFound } from "next/navigation";
 import {
@@ -99,10 +100,7 @@ export default async function LeaguePickBanPage({ params }: PickBanPageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const league = await getLeagueBySlug(slug);
-
-  // 404 missing leagues and leagues with no matches so the empty body doesn't
-  // get classified as a soft 404 by Search Console.
-  if (!league || !league.lastMatchTime) {
+  if (!league) {
     notFound();
   }
 
@@ -112,7 +110,8 @@ export default async function LeaguePickBanPage({ params }: PickBanPageProps) {
     getTeams(),
   ]);
 
-  // Same reasoning: a draft-less league produces a near-empty body. 404 it.
+  // A draft-less league produces a near-empty body — 404 so Search Console
+  // doesn't classify it as a soft 404.
   if (!analysis || analysis.matchesWithDraft === 0) {
     notFound();
   }
@@ -722,13 +721,14 @@ function RankingCard({ icon, title, hint, entries }: RankingCardProps) {
                 <span className="w-5 text-xs font-semibold text-muted-foreground">
                   {index + 1}
                 </span>
-                <div className="h-8 w-8 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
+                <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
                   {entry.heroImage ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={entry.heroImage}
                       alt={entry.heroName}
-                      className="h-full w-full object-cover"
+                      fill
+                      sizes="32px"
+                      className="object-cover"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
@@ -779,10 +779,15 @@ function TeamHeroList({
             const image = buildHeroImageUrl(entry.heroId);
             return (
               <li key={entry.heroId} className="flex items-center gap-2 text-xs">
-                <div className="h-5 w-5 overflow-hidden rounded-sm border border-border/60 bg-muted">
+                <div className="relative h-5 w-5 overflow-hidden rounded-sm border border-border/60 bg-muted">
                   {image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={image} alt={heroName} className="h-full w-full object-cover" />
+                    <Image
+                      src={image}
+                      alt={heroName}
+                      fill
+                      sizes="20px"
+                      className="object-cover"
+                    />
                   ) : null}
                 </div>
                 <span className="flex-1 truncate text-foreground">{heroName}</span>

@@ -11,16 +11,25 @@ export class ApiError extends Error {
   }
 }
 
+const isBrowser = typeof window !== "undefined";
+
 export async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T> {
   const { revalidate, ...init } = options;
   const url = `${baseUrl()}${path}`;
+  // Only default `credentials: include` in the browser. Setting it server-side
+  // tells Next.js to forward the incoming request's cookies, which marks the
+  // surrounding route as dynamic and breaks ISR pages with
+  // `DYNAMIC_SERVER_USAGE` at render time. Server-side callers that genuinely
+  // need to forward auth (e.g. SiteAuth's /auth/me) pass cookies via `headers`
+  // explicitly, not via this default.
+  const credentials = init.credentials ?? (isBrowser ? "include" : undefined);
   const response = await fetch(url, {
     ...init,
     headers: {
       "Content-Type": "application/json",
       ...(init.headers ?? {}),
     },
-    credentials: init.credentials ?? "include",
+    ...(credentials ? { credentials } : {}),
     ...(revalidate !== undefined ? { next: { revalidate } } : {}),
   });
 

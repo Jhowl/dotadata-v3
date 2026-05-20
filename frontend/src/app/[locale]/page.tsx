@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Badge } from "@/components/ui/badge";
@@ -603,12 +604,12 @@ function LiveLeagueCard({
       {leader ? (
         <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-2 px-2.5 py-1.5">
           {leader.logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={leader.logoUrl}
               alt=""
               width={20}
               height={20}
+              unoptimized
               className="h-5 w-5 rounded object-contain"
             />
           ) : (
@@ -656,8 +657,14 @@ function MatchRow({
       >
         <span className="truncate font-medium">{radiant?.name ?? "Radiant"}</span>
         {radiant?.logoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={radiant.logoUrl} alt="" className="h-4 w-4 shrink-0 rounded object-contain" />
+          <Image
+            src={radiant.logoUrl}
+            alt=""
+            width={16}
+            height={16}
+            unoptimized
+            className="h-4 w-4 shrink-0 rounded object-contain"
+          />
         ) : null}
       </div>
       <div className="font-display text-sm font-semibold tracking-tight" data-num>
@@ -675,8 +682,14 @@ function MatchRow({
         }`}
       >
         {dire?.logoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={dire.logoUrl} alt="" className="h-4 w-4 shrink-0 rounded object-contain" />
+          <Image
+            src={dire.logoUrl}
+            alt=""
+            width={16}
+            height={16}
+            unoptimized
+            className="h-4 w-4 shrink-0 rounded object-contain"
+          />
         ) : null}
         <span className="truncate font-medium">{dire?.name ?? "Dire"}</span>
       </div>
@@ -705,8 +718,13 @@ function MetaHeroTile({
     <div className="card-elevated flex flex-col items-center gap-2 p-3 text-center">
       <div className="relative aspect-[256/144] w-full overflow-hidden rounded-lg bg-surface-2">
         {image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt={name} className="h-full w-full object-cover" loading="lazy" />
+          <Image
+            src={image}
+            alt={name}
+            fill
+            sizes="(min-width: 1024px) 8rem, (min-width: 640px) 25vw, 50vw"
+            className="object-cover"
+          />
         ) : (
           <div className="flex h-full items-center justify-center text-2xl text-muted-foreground">
             ★
@@ -738,10 +756,12 @@ function ChampionTeamCard({
       className="card-elevated focus-ring flex items-center gap-3 p-4 transition-[transform,border-color] hover:-translate-y-0.5 hover:border-primary/40"
     >
       {team.logoUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={team.logoUrl}
           alt=""
+          width={40}
+          height={40}
+          unoptimized
           className="h-10 w-10 shrink-0 rounded object-contain"
         />
       ) : (

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
@@ -191,12 +192,12 @@ export function CommentsSection({ entityType, entityId }: Props) {
                 className="flex gap-3 rounded-md border border-border/40 bg-background/40 p-3"
               >
                 {comment.avatarUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <Image
                     src={comment.avatarUrl}
                     alt=""
                     width={36}
                     height={36}
+                    unoptimized
                     className="h-9 w-9 shrink-0 rounded-full border border-border/60 object-cover"
                   />
                 ) : (

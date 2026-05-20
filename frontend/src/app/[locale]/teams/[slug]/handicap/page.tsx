@@ -80,9 +80,9 @@ const finalizePercentages = (stats: HandicapStats, handicapRange: string[]) => {
   });
 };
 
-// 24h ISR. Handicap recomputes from match-level data which itself updates
-// at most daily; no need to SSR per request.
-export const revalidate = 86400;
+// SSR every request — see note on team slug page; the dynamic locale layout
+// makes ISR untenable here.
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const slugs = await getTeamStaticParams();
@@ -119,10 +119,7 @@ export default async function TeamHandicapPage({ params }: TeamHandicapPageProps
   const t = await getTranslations("teamHandicap");
   const tc = await getTranslations("common");
   const team = await getTeamBySlug(slug);
-
-  // 404 missing teams (and teams without match data) so the empty handicap
-  // grid doesn't get classified as a soft 404 by Search Console.
-  if (!team || !team.lastMatchTime) {
+  if (!team) {
     notFound();
   }
 
@@ -131,6 +128,12 @@ export default async function TeamHandicapPage({ params }: TeamHandicapPageProps
     getLeagues(),
     getPatches(),
   ]);
+
+  // "Has data" signal for this page is the matches list itself — empty means
+  // no handicap rows to render, which would be a soft 404 to Search Console.
+  if (matches.length === 0) {
+    notFound();
+  }
 
   const handicapRange = buildHandicapRange();
   const leagueLookup = new Map(leagues.map((league) => [league.id, league]));

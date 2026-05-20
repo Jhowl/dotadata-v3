@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -53,13 +54,14 @@ export function LeaguePickBanTable({ rows }: LeaguePickBanTableProps) {
       header: "Hero",
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
+          <div className="relative h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
             {row.original.heroImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={row.original.heroImage}
                 alt={row.original.heroName}
-                className="h-full w-full object-cover"
+                fill
+                sizes="32px"
+                className="object-cover"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">

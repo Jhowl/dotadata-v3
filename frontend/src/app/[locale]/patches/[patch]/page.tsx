@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 
 import { YearlyMetricLine } from '@/components/charts/yearly-metric-line';
@@ -429,10 +430,9 @@ export default async function PatchPage({ params }: PatchPageProps) {
                                             key={entry.heroId}
                                             className="flex items-center gap-3 rounded-lg border border-border/60 bg-background/40 p-3"
                                         >
-                                            <div className="h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
+                                            <div className="relative h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
                                                 {heroImage ? (
-                                                    // eslint-disable-next-line @next/next/no-img-element
-                                                    <img src={heroImage} alt={heroName} className="h-full w-full object-cover" />
+                                                    <Image src={heroImage} alt={heroName} fill sizes="32px" className="object-cover" />
                                                 ) : (
                                                     <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
                                                         N/A
@@ -478,10 +478,9 @@ export default async function PatchPage({ params }: PatchPageProps) {
                                 return (
                                     <div key={entry.key} className="rounded-lg border border-border/60 bg-background/40 p-4">
                                         <div className="flex items-start gap-4">
-                                            <div className="h-14 w-14 overflow-hidden rounded-lg border border-border/60 bg-muted">
+                                            <div className="relative h-14 w-14 overflow-hidden rounded-lg border border-border/60 bg-muted">
                                                 {heroImage ? (
-                                                    // eslint-disable-next-line @next/next/no-img-element
-                                                    <img src={heroImage} alt={heroName} className="h-full w-full object-cover" />
+                                                    <Image src={heroImage} alt={heroName} fill sizes="56px" className="object-cover" />
                                                 ) : (
                                                     <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
                                                         N/A

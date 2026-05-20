@@ -132,7 +132,7 @@ export async function getLeagues(): Promise<League[]> {
         return mockLeagues;
     }
 
-    return withRedisCache('leagues', DAY_IN_SECONDS, async () => {
+    return withRedisCache('leagues:v2', DAY_IN_SECONDS, async () => {
         const { data, error } = await supabaseClient
             .from('leagues')
             .select('league_id,slug,name,start_date,end_date')
@@ -166,6 +166,34 @@ export async function getLeagues(): Promise<League[]> {
     });
 }
 
+// Looks up last_match_time for a single league/team out of the summary view.
+// The plural queries pre-load this for all rows; the by-slug queries hit one
+// row, so we do a second tiny query here. Returns null on miss so the caller
+// can decide whether that means "no matches" or "view out of sync".
+const fetchLastMatchTimeForLeague = async (leagueId: string): Promise<string | null> => {
+    if (!supabase || !leagueId) return null;
+    const { data, error } = await supabaseClient
+        .from('league_summary_view')
+        .select('last_match_time')
+        .eq('league_id', leagueId)
+        .maybeSingle();
+    if (error || !data) return null;
+    const value = (data as Record<string, unknown>).last_match_time;
+    return value != null ? String(value) : null;
+};
+
+const fetchLastMatchTimeForTeam = async (teamId: string): Promise<string | null> => {
+    if (!supabase || !teamId) return null;
+    const { data, error } = await supabaseClient
+        .from('team_summary_view')
+        .select('last_match_time')
+        .eq('team_id', teamId)
+        .maybeSingle();
+    if (error || !data) return null;
+    const value = (data as Record<string, unknown>).last_match_time;
+    return value != null ? String(value) : null;
+};
+
 export async function getLeagueBySlug(slug: string): Promise<League | null> {
     if (!supabase) {
         return mockLeagues.find((league) => league.slug === slug) ?? null;
@@ -179,7 +207,13 @@ export async function getLeagueBySlug(slug: string): Promise<League | null> {
     const idMatch = trimmedSlug.match(/-(\d+)$/);
     const leagueId = /^\d+$/.test(trimmedSlug) ? trimmedSlug : idMatch ? idMatch[1] : null;
 
-    return withRedisCache(`league:${encodeCachePart(trimmedSlug)}`, DAY_IN_SECONDS, async () => {
+    // Cache key bumped to v2 when the shape grew a lastMatchTime field; the
+    // old `league:` keys are still in Redis for 24h after deploy and would
+    // serve pre-fix JSON that the frontend treats as "no data". Keep this
+    // suffix until the next breaking shape change.
+    return withRedisCache(`league:v2:${encodeCachePart(trimmedSlug)}`, DAY_IN_SECONDS, async () => {
+        let league: League | null = null;
+
         if (leagueId) {
             const { data, error } = await supabaseClient
                 .from('leagues')
@@ -188,21 +222,26 @@ export async function getLeagueBySlug(slug: string): Promise<League | null> {
                 .maybeSingle();
 
             if (!error && data) {
-                return mapLeague(data as Record<string, unknown>);
+                league = mapLeague(data as Record<string, unknown>);
             }
         }
 
-        const { data, error } = await supabaseClient
-            .from('leagues')
-            .select('league_id,slug,name,start_date,end_date')
-            .eq('slug', trimmedSlug)
-            .maybeSingle();
+        if (!league) {
+            const { data, error } = await supabaseClient
+                .from('leagues')
+                .select('league_id,slug,name,start_date,end_date')
+                .eq('slug', trimmedSlug)
+                .maybeSingle();
 
-        if (error || !data) {
-            return mockLeagues.find((league) => league.slug === slug) ?? null;
+            if (error || !data) {
+                return mockLeagues.find((mockLeague) => mockLeague.slug === slug) ?? null;
+            }
+            league = mapLeague(data as Record<string, unknown>);
         }
 
-        return mapLeague(data as Record<string, unknown>);
+        // The frontend uses lastMatchTime as the discriminator between "real
+        // league" and "empty/orphaned record" — without it, valid leagues 404.
+        return { ...league, lastMatchTime: await fetchLastMatchTimeForLeague(league.id) };
     });
 }
 
@@ -211,7 +250,7 @@ export async function getTeams(): Promise<Team[]> {
         return mockTeams;
     }
 
-    return withRedisCache('teams', DAY_IN_SECONDS, async () => {
+    return withRedisCache('teams:v2', DAY_IN_SECONDS, async () => {
         const { data, error } = await supabaseClient
             .from('teams')
             .select('team_id,slug,name,logo_url')
@@ -286,7 +325,11 @@ export async function getTeamBySlug(slug: string): Promise<Team | null> {
     const trimmedSlug = slug.trim();
     const lookupAsId = isNumericId(trimmedSlug);
 
-    return withRedisCache(`team:${encodeCachePart(trimmedSlug)}`, DAY_IN_SECONDS, async () => {
+    // See note on getLeagueBySlug — same v2 bump to bypass stale Redis values
+    // that lack lastMatchTime.
+    return withRedisCache(`team:v2:${encodeCachePart(trimmedSlug)}`, DAY_IN_SECONDS, async () => {
+        let team: Team | null = null;
+
         if (lookupAsId) {
             const { data, error } = await supabaseClient
                 .from('teams')
@@ -294,21 +337,27 @@ export async function getTeamBySlug(slug: string): Promise<Team | null> {
                 .eq('team_id', trimmedSlug)
                 .maybeSingle();
             if (!error && data) {
-                return mapTeam(data as Record<string, unknown>);
+                team = mapTeam(data as Record<string, unknown>);
             }
         }
 
-        const { data, error } = await supabaseClient
-            .from('teams')
-            .select('team_id,slug,name,logo_url')
-            .eq('slug', trimmedSlug)
-            .maybeSingle();
+        if (!team) {
+            const { data, error } = await supabaseClient
+                .from('teams')
+                .select('team_id,slug,name,logo_url')
+                .eq('slug', trimmedSlug)
+                .maybeSingle();
 
-        if (error || !data) {
-            return mockTeams.find((team) => team.slug === slug || team.id === slug) ?? null;
+            if (error || !data) {
+                return mockTeams.find((mockTeam) => mockTeam.slug === slug || mockTeam.id === slug) ?? null;
+            }
+            team = mapTeam(data as Record<string, unknown>);
         }
 
-        return mapTeam(data as Record<string, unknown>);
+        // See note on fetchLastMatchTimeForLeague — the frontend treats a
+        // missing lastMatchTime as "no real data" and 404s, so we need to
+        // enrich here even though the listing query already does it.
+        return { ...team, lastMatchTime: await fetchLastMatchTimeForTeam(team.id) };
     });
 }
 

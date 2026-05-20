@@ -10,6 +10,20 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(import.meta.dirname),
   },
+  images: {
+    // Hero portraits and ability icons come from Steam's CDN. Allowing them
+    // here lets next/image fetch + re-encode to WebP/AVIF and serve responsive
+    // sizes via the /_next/image route. Team logos (team.logoUrl) come from
+    // arbitrary org-controlled CDNs we don't enumerate — those keep using
+    // `<Image unoptimized>` to bypass the optimizer.
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.cloudflare.steamstatic.com",
+        pathname: "/apps/dota2/images/**",
+      },
+    ],
+  },
   async headers() {
     return [
       {

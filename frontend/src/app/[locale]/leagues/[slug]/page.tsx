@@ -130,11 +130,7 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const league = await getLeagueBySlug(slug);
-
-  // Real 404 for missing leagues and leagues with no matches — both render
-  // thin content that Search Console flags as soft 404. The localized 404 UX
-  // lives in [locale]/not-found.tsx.
-  if (!league || !league.lastMatchTime) {
+  if (!league) {
     notFound();
   }
 
@@ -147,6 +143,16 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
     getLeagueTeamParticipation(league.id),
     getLeagueChampion(league.id),
   ]);
+
+  // The summary is the authoritative "has content" signal — getLeagueSummary
+  // checks both league_snapshots and league_summary_view, so a null result
+  // means the league genuinely has no recorded matches anywhere. 404 those so
+  // Search Console doesn't classify the thin empty-state body as soft 404.
+  // (Earlier versions of this check looked at league.lastMatchTime, but the
+  // view's last_match_time can lag for in-progress tournaments.)
+  if (!leagueSummary) {
+    notFound();
+  }
 
   const highlightMatchIds = [
     leagueSummary?.minScoreMatchId,
@@ -627,13 +633,14 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
                               key={`${entry.team}-${entry.heroId}`}
                               className="flex items-center gap-3 rounded-lg border border-border/60 bg-background/40 p-3"
                             >
-                              <div className="h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
+                              <div className="relative h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
                                 {heroImage ? (
-                                  // eslint-disable-next-line @next/next/no-img-element
-                                  <img
+                                  <Image
                                     src={heroImage}
                                     alt={heroName}
-                                    className="h-full w-full object-cover"
+                                    fill
+                                    sizes="32px"
+                                    className="object-cover"
                                   />
                                 ) : (
                                   <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
@@ -706,13 +713,14 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
                             className="rounded-lg border border-border/60 bg-background/40 p-4"
                           >
                             <div className="flex items-start gap-4">
-                              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted">
+                              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted">
                                 {heroImage ? (
-                                  // eslint-disable-next-line @next/next/no-img-element
-                                  <img
+                                  <Image
                                     src={heroImage}
                                     alt={heroName}
-                                    className="h-full w-full object-cover"
+                                    fill
+                                    sizes="56px"
+                                    className="object-cover"
                                   />
                                 ) : (
                                   <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
@@ -823,13 +831,14 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
                                 <td className="px-4 py-3 text-muted-foreground">
                                   {heroName ? (
                                     <div className="flex items-center gap-2">
-                                      <div className="h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
+                                      <div className="relative h-8 w-8 overflow-hidden rounded-md border border-border/60 bg-muted">
                                         {heroImage ? (
-                                          // eslint-disable-next-line @next/next/no-img-element
-                                          <img
+                                          <Image
                                             src={heroImage}
                                             alt={heroName}
-                                            className="h-full w-full object-cover"
+                                            fill
+                                            sizes="32px"
+                                            className="object-cover"
                                           />
                                         ) : (
                                           <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
@@ -1145,13 +1154,14 @@ function ChampionSpotlight({
                   key={`${player.accountId ?? "anon"}-${index}`}
                   className="flex items-center gap-3 rounded-xl border border-border/60 bg-background/60 p-3"
                 >
-                  <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
+                  <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
                     {heroImage ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                      <Image
                         src={heroImage}
                         alt={heroName}
-                        className="h-full w-full object-cover"
+                        fill
+                        sizes="40px"
+                        className="object-cover"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
