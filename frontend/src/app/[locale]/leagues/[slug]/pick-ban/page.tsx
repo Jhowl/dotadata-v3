@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { notFound } from "next/navigation";
 import {
   ArrowLeft,
   Award,
@@ -90,16 +91,19 @@ export async function generateMetadata({ params }: PickBanPageProps) {
   };
 }
 
-export const dynamic = "force-dynamic";
+// 24h ISR. Draft analysis is derived from match data and only changes when
+// new matches land.
+export const revalidate = 86400;
 
 export default async function LeaguePickBanPage({ params }: PickBanPageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const tLeague = await getTranslations("league");
   const league = await getLeagueBySlug(slug);
 
-  if (!league) {
-    return <div className="py-20 text-center text-muted-foreground">{tLeague("notFound")}</div>;
+  // 404 missing leagues and leagues with no matches so the empty body doesn't
+  // get classified as a soft 404 by Search Console.
+  if (!league || !league.lastMatchTime) {
+    notFound();
   }
 
   const [analysis, heroes, teams] = await Promise.all([
@@ -108,40 +112,14 @@ export default async function LeaguePickBanPage({ params }: PickBanPageProps) {
     getTeams(),
   ]);
 
+  // Same reasoning: a draft-less league produces a near-empty body. 404 it.
+  if (!analysis || analysis.matchesWithDraft === 0) {
+    notFound();
+  }
+
   const heroLookup = new Map(heroes.map((hero) => [hero.id, hero.localizedName]));
   const teamLookup = new Map(teams.map((team) => [team.id, team]));
   const buildHeroImageUrl = createHeroImageResolver(heroes);
-
-  if (!analysis || analysis.matchesWithDraft === 0) {
-    return (
-      <div className="space-y-8">
-        <Breadcrumbs
-          items={[
-            { title: "Leagues", url: "/leagues" },
-            { title: league.name, url: `/leagues/${league.slug}` },
-            { title: "Pick & Ban" },
-          ]}
-        />
-        <Card className="border-border/60 bg-card/80">
-          <CardContent className="p-10 text-center">
-            <h1 className="font-display text-2xl font-semibold">
-              {league.name} — Pick &amp; Ban Analysis
-            </h1>
-            <p className="mt-3 text-sm text-muted-foreground">
-              No draft data is available for this league yet.
-            </p>
-            <Link
-              href={`/leagues/${league.slug}`}
-              className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to {league.name}
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   const tableRows: PickBanTableRow[] = analysis.heroes.map((hero) => ({
     heroId: hero.heroId,

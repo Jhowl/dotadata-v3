@@ -21,7 +21,8 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "common" });
   const title = `${t("siteName")} | ${t("siteTagline")}`;
   const description = t("siteDescription");
-  const localePath = locale === routing.defaultLocale ? "" : `/${locale}`;
+  const isDefaultLocale = locale === routing.defaultLocale;
+  const localePath = isDefaultLocale ? "" : `/${locale}`;
   const canonical = `${localePath}/`;
 
   return {
@@ -30,6 +31,14 @@ export async function generateMetadata({
       template: `%s | ${t("siteName")}`,
     },
     description,
+    // Non-default locales (currently /ru/*) render essentially identical
+    // English content because page bodies aren't translated yet. Google was
+    // consolidating /ru/<x> against /<x> and dropping the Russian URL from
+    // the index anyway; noindex makes that explicit and frees crawl budget.
+    // The /ru/* routes keep working for users — only search visibility is
+    // suppressed. Page-level metadata merges with this, so individual pages
+    // don't need to repeat this setting.
+    robots: isDefaultLocale ? undefined : { index: false, follow: true },
     openGraph: {
       title,
       description,

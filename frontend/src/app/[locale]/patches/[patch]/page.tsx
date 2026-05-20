@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: PatchPageProps) {
     };
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
 
 export default async function PatchPage({ params }: PatchPageProps) {
     const { locale, patch } = await params;

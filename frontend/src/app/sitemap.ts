@@ -70,32 +70,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
   });
 
-  leagues.forEach((league) => {
-    entries.push(
-      ...localizedEntry(`/leagues/${league.slug}`, {
-        changeFrequency: "weekly",
-        priority: 0.7,
-        lastModified: now,
-      }),
-    );
-    entries.push(
-      ...localizedEntry(`/leagues/${league.slug}/pick-ban`, {
-        changeFrequency: "weekly",
-        priority: 0.6,
-        lastModified: now,
-      }),
-    );
-  });
+  // Only sitemap entities that actually have match data. Empty teams/leagues
+  // render a "No data" state and get classified as soft 404s by Search Console,
+  // which then suppresses indexing of the rest of the site.
+  leagues
+    .filter((league) => Boolean(league.slug && league.lastMatchTime))
+    .forEach((league) => {
+      const leagueLastModified = league.lastMatchTime ? new Date(league.lastMatchTime) : now;
+      entries.push(
+        ...localizedEntry(`/leagues/${league.slug}`, {
+          changeFrequency: "weekly",
+          priority: 0.7,
+          lastModified: leagueLastModified,
+        }),
+      );
+      entries.push(
+        ...localizedEntry(`/leagues/${league.slug}/pick-ban`, {
+          changeFrequency: "weekly",
+          priority: 0.6,
+          lastModified: leagueLastModified,
+        }),
+      );
+    });
 
-  teams.forEach((team) => {
-    entries.push(
-      ...localizedEntry(`/teams/${team.slug}`, {
-        changeFrequency: "weekly",
-        priority: 0.7,
-        lastModified: now,
-      }),
-    );
-  });
+  teams
+    .filter((team) => Boolean(team.slug && team.lastMatchTime))
+    .forEach((team) => {
+      entries.push(
+        ...localizedEntry(`/teams/${team.slug}`, {
+          changeFrequency: "weekly",
+          priority: 0.7,
+          lastModified: team.lastMatchTime ? new Date(team.lastMatchTime) : now,
+        }),
+      );
+    });
 
   patches.forEach((patch) => {
     entries.push(

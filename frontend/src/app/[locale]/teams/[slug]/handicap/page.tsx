@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { ShareButton } from "@/components/share-button";
@@ -79,7 +80,9 @@ const finalizePercentages = (stats: HandicapStats, handicapRange: string[]) => {
   });
 };
 
-export const dynamic = "force-dynamic";
+// 24h ISR. Handicap recomputes from match-level data which itself updates
+// at most daily; no need to SSR per request.
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const slugs = await getTeamStaticParams();
@@ -117,8 +120,10 @@ export default async function TeamHandicapPage({ params }: TeamHandicapPageProps
   const tc = await getTranslations("common");
   const team = await getTeamBySlug(slug);
 
-  if (!team) {
-    return <div className="py-20 text-center text-muted-foreground">Team not found.</div>;
+  // 404 missing teams (and teams without match data) so the empty handicap
+  // grid doesn't get classified as a soft 404 by Search Console.
+  if (!team || !team.lastMatchTime) {
+    notFound();
   }
 
   const [matches, leagues, patches] = await Promise.all([

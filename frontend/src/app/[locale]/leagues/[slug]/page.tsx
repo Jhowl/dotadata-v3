@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import {
   ArrowRight,
   Calendar,
@@ -120,16 +121,22 @@ export async function generateMetadata({ params }: LeaguePageProps) {
   };
 }
 
-export const dynamic = "force-dynamic";
+// 24h ISR. Backend already caches model queries in Redis; this adds a second
+// layer at the Next level so crawlers and repeat visitors hit a prerendered
+// HTML cache. Comments load client-side, so cached HTML never goes stale on
+// user-generated content.
+export const revalidate = 86400;
 
 export default async function LeaguePage({ params }: LeaguePageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("league");
   const league = await getLeagueBySlug(slug);
 
-  if (!league) {
-    return <div className="py-20 text-center text-muted-foreground">{t("notFound")}</div>;
+  // Real 404 for missing leagues and leagues with no matches — both render
+  // thin content that Search Console flags as soft 404. The localized 404 UX
+  // lives in [locale]/not-found.tsx.
+  if (!league || !league.lastMatchTime) {
+    notFound();
   }
 
   const [leagueSummary, teams, heroes, topPerformers, pickBanStats, teamParticipation, champion] = await Promise.all([
@@ -245,31 +252,38 @@ export default async function LeaguePage({ params }: LeaguePageProps) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SportsEvent",
-            name: league.name,
-            sport: "Dota 2",
-            startDate: league.startDate ?? undefined,
-            endDate: league.endDate ?? undefined,
-            eventStatus: isOngoing
-              ? "https://schema.org/EventScheduled"
-              : "https://schema.org/EventCompleted",
-            url: `https://dotadata.org/leagues/${league.slug}`,
-            description: summary.totalMatches
-              ? `${league.name} statistics: ${formatNumber(summary.totalMatches)} matches across ${formatNumber(summary.totalTeams)} teams.`
-              : league.name,
-            organizer: {
-              "@type": "Organization",
-              name: "DotaData",
-              url: "https://dotadata.org",
-            },
-          }),
-        }}
-      />
+      {league.startDate ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SportsEvent",
+              name: league.name,
+              sport: "Dota 2",
+              startDate: league.startDate,
+              endDate: league.endDate ?? undefined,
+              eventStatus: isOngoing
+                ? "https://schema.org/EventScheduled"
+                : "https://schema.org/EventCompleted",
+              eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+              location: {
+                "@type": "VirtualLocation",
+                url: `https://dotadata.org/leagues/${league.slug}`,
+              },
+              url: `https://dotadata.org/leagues/${league.slug}`,
+              description: summary.totalMatches
+                ? `${league.name} statistics: ${formatNumber(summary.totalMatches)} matches across ${formatNumber(summary.totalTeams)} teams.`
+                : league.name,
+              organizer: {
+                "@type": "Organization",
+                name: "DotaData",
+                url: "https://dotadata.org",
+              },
+            }),
+          }}
+        />
+      ) : null}
 
       <script
         type="application/ld+json"

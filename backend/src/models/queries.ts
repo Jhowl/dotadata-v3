@@ -142,7 +142,27 @@ export async function getLeagues(): Promise<League[]> {
             return mockLeagues;
         }
 
-        return data.map((row) => mapLeague(row as Record<string, unknown>));
+        const leagues = data.map((row) => mapLeague(row as Record<string, unknown>));
+
+        // Pull last_match_time from league_summary_view so we can filter empty
+        // leagues out of the sitemap (Search Console flags them as soft 404s
+        // when crawled).
+        const { data: viewRows } = await supabaseClient
+            .from('league_summary_view')
+            .select('league_id,last_match_time');
+
+        const lastMatchByLeague = new Map<string, string | null>();
+        for (const row of (viewRows as Array<Record<string, unknown>> | null) ?? []) {
+            const id = row.league_id ? String(row.league_id) : '';
+            if (!id) continue;
+            const raw = row.last_match_time;
+            lastMatchByLeague.set(id, raw != null ? String(raw) : null);
+        }
+
+        return leagues.map((league) => ({
+            ...league,
+            lastMatchTime: lastMatchByLeague.get(league.id) ?? null,
+        }));
     });
 }
 
@@ -207,20 +227,33 @@ export async function getTeams(): Promise<Team[]> {
             .from('team_summary_view')
             .select('team_id,last_match_time');
 
+        // Two parallel maps: numeric (for sorting) and ISO (for type field).
+        // Teams missing from the view have no matches recorded — we'll surface
+        // that via lastMatchTime=null so the sitemap / page can skip them.
         const latestMatchByTeam = new Map<string, number>();
+        const lastMatchIsoByTeam = new Map<string, string | null>();
         for (const row of (viewRows as Array<Record<string, unknown>> | null) ?? []) {
             const id = row.team_id ? String(row.team_id) : '';
-            const ts = Date.parse(String(row.last_match_time ?? ''));
-            if (id && Number.isFinite(ts)) {
+            if (!id) continue;
+            const raw = row.last_match_time;
+            const iso = raw != null ? String(raw) : null;
+            const ts = iso ? Date.parse(iso) : NaN;
+            lastMatchIsoByTeam.set(id, iso);
+            if (Number.isFinite(ts)) {
                 latestMatchByTeam.set(id, ts);
             }
         }
 
-        return teams.sort((a, b) => {
-            const timeA = latestMatchByTeam.get(a.id) ?? 0;
-            const timeB = latestMatchByTeam.get(b.id) ?? 0;
-            return timeB - timeA;
-        });
+        return teams
+            .map((team) => ({
+                ...team,
+                lastMatchTime: lastMatchIsoByTeam.get(team.id) ?? null,
+            }))
+            .sort((a, b) => {
+                const timeA = latestMatchByTeam.get(a.id) ?? 0;
+                const timeB = latestMatchByTeam.get(b.id) ?? 0;
+                return timeB - timeA;
+            });
     });
 }
 

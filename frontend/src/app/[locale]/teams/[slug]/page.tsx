@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -75,7 +76,8 @@ export async function generateMetadata({ params }: TeamPageProps) {
   };
 }
 
-export const dynamic = "force-dynamic";
+// 24h ISR. See note on league slug page.
+export const revalidate = 86400;
 
 export default async function TeamPage({ params }: TeamPageProps) {
   const { locale, slug } = await params;
@@ -84,8 +86,12 @@ export default async function TeamPage({ params }: TeamPageProps) {
   const tc = await getTranslations("common");
   const team = await getTeamBySlug(slug);
 
-  if (!team) {
-    return <div className="py-20 text-center text-muted-foreground">Team not found.</div>;
+  // Real 404 (not a 200 with thin content) so Search Console doesn't classify
+  // missing-team pages as soft 404s. Also 404 teams that exist in the DB but
+  // have no matches recorded — the page would otherwise render an empty-state
+  // body that Google equally flags as soft 404.
+  if (!team || !team.lastMatchTime) {
+    notFound();
   }
 
   const [teamSummary, teams, heroes, topPerformers, pickBanStats, leagues, lastWinners] = await Promise.all([
