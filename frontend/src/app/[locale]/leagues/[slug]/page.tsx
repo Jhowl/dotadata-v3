@@ -121,11 +121,10 @@ export async function generateMetadata({ params }: LeaguePageProps) {
   };
 }
 
-// 24h ISR. Backend already caches model queries in Redis; this adds a second
-// layer at the Next level so crawlers and repeat visitors hit a prerendered
-// HTML cache. Comments load client-side, so cached HTML never goes stale on
-// user-generated content.
-export const revalidate = 86400;
+// SSR every request. ISR is too stale for live tournaments — stats update as
+// matches finish and a 24h cache shows old standings/highlights mid-event.
+// The backend's Redis cache still absorbs the load.
+export const dynamic = "force-dynamic";
 
 export default async function LeaguePage({ params }: LeaguePageProps) {
   const { locale, slug } = await params;

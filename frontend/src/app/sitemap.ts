@@ -1,30 +1,25 @@
 import type { MetadataRoute } from "next";
 
-import { routing } from "@/i18n/routing";
 import { getLeagues, getPatches, getTeams } from "@/lib/supabase/queries";
 import { getBlogPosts } from "@/lib/blog-posts";
 
 const baseUrl = "https://dotadata.org";
 
-const buildAlternates = (path: string) => ({
-  languages: {
-    en: `${baseUrl}${path}`,
-    ru: `${baseUrl}/ru${path}`,
-    "x-default": `${baseUrl}${path}`,
-  },
-});
-
+// Sitemap emits the default-locale URL only. Non-default locales (currently
+// /ru/*) carry `<meta name="robots" content="noindex,follow">` (set in
+// [locale]/layout.tsx) because their page bodies aren't translated yet —
+// advertising them in the sitemap would just waste crawl budget.
 const localizedEntry = (
   path: string,
   options: { changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number; lastModified: Date },
-): MetadataRoute.Sitemap =>
-  routing.locales.map((locale) => ({
-    url: locale === routing.defaultLocale ? `${baseUrl}${path}` : `${baseUrl}/${locale}${path}`,
+): MetadataRoute.Sitemap => [
+  {
+    url: `${baseUrl}${path}`,
     lastModified: options.lastModified,
     changeFrequency: options.changeFrequency,
-    priority: locale === routing.defaultLocale ? options.priority : Math.max(0.3, options.priority - 0.1),
-    alternates: buildAlternates(path),
-  }));
+    priority: options.priority,
+  },
+];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [leagues, teams, patches, blogPosts] = await Promise.all([

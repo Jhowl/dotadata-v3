@@ -91,9 +91,9 @@ export async function generateMetadata({ params }: PickBanPageProps) {
   };
 }
 
-// 24h ISR. Draft analysis is derived from match data and only changes when
-// new matches land.
-export const revalidate = 86400;
+// SSR every request — pick/ban data shifts every match during live events.
+// Backend Redis cache still handles repeated load.
+export const dynamic = "force-dynamic";
 
 export default async function LeaguePickBanPage({ params }: PickBanPageProps) {
   const { locale, slug } = await params;

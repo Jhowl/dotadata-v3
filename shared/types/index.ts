@@ -4,6 +4,10 @@ export type League = {
   name: string;
   startDate: string | null;
   endDate: string | null;
+  // Most recent match timestamp from league_summary_view. Used to filter
+  // empty leagues out of the sitemap and trigger 404s for league pages with
+  // no data (avoids soft-404s in Search Console).
+  lastMatchTime?: string | null;
 };
 
 export type Team = {
@@ -11,6 +15,10 @@ export type Team = {
   slug: string;
   name: string;
   logoUrl: string | null;
+  // Most recent match timestamp from team_summary_view. Used to filter
+  // empty teams out of the sitemap and trigger 404s for team pages with
+  // no data (avoids soft-404s in Search Console).
+  lastMatchTime?: string | null;
 };
 
 export type Patch = {
