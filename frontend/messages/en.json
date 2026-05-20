@@ -72,7 +72,16 @@
     "dreamleague": "DreamLeague",
     "patches": "Patches",
     "contact": "Contact",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "body": "We hit an unexpected error rendering this page. It's most likely transient — try again, or head back to the home page.",
+    "tryAgain": "Try again",
+    "goHome": "Go home",
+    "digestLabel": "Error reference"
   },
   "auth": {
     "signInSteam": "Sign in with Steam",

@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { MobileNav, type MobileNavItem } from "@/components/mobile-nav";
 import { SiteAuth } from "@/components/site-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Link } from "@/i18n/navigation";
@@ -21,15 +22,29 @@ export async function SiteHeader() {
   const tc = await getTranslations("common");
   const locale = await getLocale();
 
+  // Translate once on the server and hand the resolved labels to MobileNav so
+  // the client component stays free of next-intl wiring.
+  const mobileItems: MobileNavItem[] = navItems.map((item) => ({
+    href: item.href,
+    label: t(item.labelKey),
+  }));
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            DD
-          </span>
-          {tc("siteName")}
-        </Link>
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-4 md:px-6">
+        <div className="flex items-center gap-2">
+          <MobileNav
+            items={mobileItems}
+            toggleLabelOpen={t("openMenu")}
+            toggleLabelClose={t("closeMenu")}
+          />
+          <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              DD
+            </span>
+            {tc("siteName")}
+          </Link>
+        </div>
         <nav className="hidden items-center gap-5 text-sm font-medium lg:flex">
           {navItems.map((item) => (
             <Link
