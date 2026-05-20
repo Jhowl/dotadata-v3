@@ -11,6 +11,7 @@ const links = [
   { href: "/dreamleague", labelKey: "dreamleague" },
   { href: "/patches", labelKey: "patches" },
   { href: "/contact", labelKey: "contact" },
+  { href: "/privacy", labelKey: "privacy" },
 ] as const;
 
 export async function SiteFooter() {

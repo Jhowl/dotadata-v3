@@ -71,7 +71,8 @@
     "international": "The International",
     "dreamleague": "DreamLeague",
     "patches": "Patches",
-    "contact": "Contact"
+    "contact": "Contact",
+    "privacy": "Privacy"
   },
   "auth": {
     "signInSteam": "Sign in with Steam",
@@ -505,5 +506,114 @@
   },
   "share": {
     "shareLabel": "Share {title}"
+  },
+  "privacy": {
+    "title": "Privacy Policy — DotaData",
+    "metaDescription": "How DotaData handles your data: Steam sign-in, comments, contact form, cookies, server logs, and your rights.",
+    "heroBadge": "Privacy Policy",
+    "heroHeading": "Privacy Policy",
+    "heroLead": "DotaData is a competitive Dota 2 analytics site. This page explains what data we collect, how we use it, and the choices you have.",
+    "lastUpdatedLabel": "Last updated",
+    "lastUpdated": "May 20, 2026",
+    "sections": [
+      {
+        "heading": "Who we are",
+        "body": [
+          "DotaData (\"we\", \"our\", or \"the site\") operates dotadata.org, a Dota 2 esports analytics platform covering leagues, teams, matches, and patches.",
+          "We are the data controller for personal data processed through this site. If you have questions about this policy, contact us via the form at /contact."
+        ]
+      },
+      {
+        "heading": "Data we collect",
+        "body": [
+          "Account data (Steam sign-in): when you sign in with Steam we receive your public Steam ID and basic profile fields (display name, avatar URL, profile URL) from Steam's OpenID service. We store these in our user database to identify you across sessions and attribute the comments you post.",
+          "Comments: any text you post as a comment is stored and displayed publicly alongside your Steam display name and avatar.",
+          "Contact form: when you submit the contact form we receive the name, email address, subject, and message you provide so we can reply to you.",
+          "Server logs: like most web services, our servers automatically log requests. Logs include IP address, user-agent, the URL requested, response status, and timestamp. We use these for security, abuse prevention, rate limiting, and debugging.",
+          "Cookies: we set a single signed session cookie (\"dd_session\") after Steam sign-in so you stay logged in. We do not use third-party advertising or analytics cookies."
+        ]
+      },
+      {
+        "heading": "How we use your data",
+        "body": [
+          "To authenticate you via Steam and keep you signed in.",
+          "To display your comments publicly with your Steam display name and avatar.",
+          "To reply to messages you send through the contact form.",
+          "To protect the service — rate limiting, abuse detection, and debugging — using IP address and request metadata.",
+          "We do not sell your personal data. We do not use it for advertising or behavioural profiling."
+        ]
+      },
+      {
+        "heading": "Legal basis (GDPR / UK GDPR)",
+        "body": [
+          "Where the GDPR or UK GDPR applies, we rely on the following legal bases: your consent (when you choose to sign in or submit a form), the performance of a service you have requested (e.g. delivering pages, posting comments), and our legitimate interest in operating, securing, and improving the service (e.g. server logs and rate limiting)."
+        ]
+      },
+      {
+        "heading": "Sharing and processors",
+        "body": [
+          "We share data only with the infrastructure providers needed to run the site. These act as data processors on our behalf:",
+          "Supabase — managed Postgres database that stores users, comments, and site content.",
+          "Redis — caching and rate-limit counters (typically holds short-lived request metadata).",
+          "Hosting provider — runs the application servers and processes incoming HTTP requests.",
+          "Steam (Valve) — receives our OpenID authentication request when you choose to sign in. We do not send your data to Steam beyond what the OpenID flow itself requires.",
+          "We do not share personal data with advertisers or data brokers."
+        ]
+      },
+      {
+        "heading": "Cookies",
+        "body": [
+          "We set one functional cookie: \"dd_session\", an HMAC-signed cookie that identifies your authenticated Steam session. It is required for sign-in to work and contains no tracking identifiers.",
+          "You can clear cookies in your browser at any time; doing so will sign you out."
+        ]
+      },
+      {
+        "heading": "Data retention",
+        "body": [
+          "Account data: kept while your account exists. If you ask us to delete your account, we remove your user record and detach or remove your comments.",
+          "Comments: kept until you or we delete them. Comments you delete are removed from the public site and from our database.",
+          "Contact form messages: kept for as long as needed to handle your request and any follow-up, typically up to 12 months.",
+          "Server logs: rotated and retained for a short period (typically up to 30 days) for security and debugging, then deleted or aggregated."
+        ]
+      },
+      {
+        "heading": "Your rights",
+        "body": [
+          "Depending on where you live, you may have the right to access, correct, delete, restrict, or object to processing of your personal data, and the right to data portability.",
+          "To exercise any of these rights, contact us via /contact with the email associated with your request. We will respond within a reasonable time and, where required, within the timeframe set by applicable law.",
+          "If you are in the EU, EEA, or UK and believe we have not handled your data lawfully, you may lodge a complaint with your local data protection authority."
+        ]
+      },
+      {
+        "heading": "Children",
+        "body": [
+          "DotaData is not directed to children under 13 (or under 16 in jurisdictions where that is the minimum age for consent). We do not knowingly collect personal data from children. If you believe a child has provided data to us, contact us and we will delete it."
+        ]
+      },
+      {
+        "heading": "International transfers",
+        "body": [
+          "Our infrastructure providers may process data in regions outside your own. Where this involves transfers out of the EU/EEA or UK, we rely on the safeguards offered by those providers (such as Standard Contractual Clauses) and limit data shared to what is necessary to run the service."
+        ]
+      },
+      {
+        "heading": "Security",
+        "body": [
+          "We use HTTPS for all traffic, HMAC-signed session cookies, server-side rate limiting, and standard hardening (CORS, Helmet, input validation). No system is perfectly secure; if you believe you have found a vulnerability, please report it via /contact."
+        ]
+      },
+      {
+        "heading": "Changes to this policy",
+        "body": [
+          "We may update this policy from time to time. The \"Last updated\" date at the top of the page reflects the latest version. Significant changes will be highlighted on the site."
+        ]
+      },
+      {
+        "heading": "Contact",
+        "body": [
+          "Questions, requests, or complaints about privacy can be sent through the contact form at /contact."
+        ]
+      }
+    ]
   }
 }
